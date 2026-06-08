@@ -93,9 +93,10 @@ Com essa solução, espera-se reduzir o tempo gasto com atividades administrativ
 
 | Tecnologia | Versão           |
 | ---------- | ---------------- |
-| React      | 19.2.7           |
-| Vite       | 8.0.4            |
-| Node.js    | 22.12.0          |
+| React      | 19.2.6           |
+| React-Dom  | 19.2.6           |
+| Vite       | 8.0.12           |
+| Node.js    | 22.13.0          |
 
 ### Principais Responsabilidades do Frontend
 
