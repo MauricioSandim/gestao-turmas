@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ufla.projeto_es.gestao_turmas.exception.turma.TurmaComNomesIguaisException;
 
 import java.net.URI;
 import java.util.List;
@@ -87,6 +88,14 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = buildProblemDetail("Unauthorized", "Falha na autenticação.", request, HttpStatus.UNAUTHORIZED);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
+    }
+
+    // Turmas
+    @ExceptionHandler(TurmaComNomesIguaisException.class)
+    public ResponseEntity<ProblemDetail> handleTurmaComNomesIguaisException(TurmaComNomesIguaisException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Nome de turma já cadastrado", ex.getMessage(), request, HttpStatus.CONFLICT);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
     }
 
     @ExceptionHandler(Exception.class)

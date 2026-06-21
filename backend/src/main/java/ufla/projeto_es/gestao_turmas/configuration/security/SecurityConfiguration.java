@@ -81,6 +81,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuario/me").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuario").hasRole("PROFESSOR")
 
+                        // GESTÃO DE TURMAS
+                        .requestMatchers(HttpMethod.GET, "/api/v1/turmas/**").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/turmas/**").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/turmas/**").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/turmas/**").hasRole("PROFESSOR")
+
                         // Regras genéricas de ADMIN para usuários (Delete, Update geral, Listar todos)
                         .requestMatchers("/api/v1/usuario/**").hasRole("ADMIN")
 
