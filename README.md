@@ -1,6 +1,6 @@
 # Sistema de Gestão Acadêmica de Turmas
 
-## Sobre o Projeto
+## 📖 Sobre o Projeto
 
 ### Contexto do Problema
 
@@ -36,7 +36,7 @@ Com essa solução, espera-se reduzir o tempo gasto com atividades administrativ
 
 ---
 
-# Objetivos do Sistema
+# 🎯 Objetivos do Sistema
 
 * Centralizar as informações acadêmicas de uma turma.
 * Facilitar o trabalho administrativo dos professores.
@@ -47,106 +47,19 @@ Com essa solução, espera-se reduzir o tempo gasto com atividades administrativ
 
 ---
 
-# Instruções para Uso
+# 🚀 Instruções para Uso
 
 > **Preencher durante o desenvolvimento**
 
 ---
 
-# Instruções para Desenvolvedores
+# 👨‍💻 Instruções para Desenvolvedores
 
 > **Preencher durante o desenvolvimento**
 
 ---
 
-# Padrão de Uso do Git
-
-## Commits
-
-Utilizar obrigatoriamente um dos prefixos abaixo:
-
-```text
-feat:     Nova funcionalidade
-fix:      Correção de erro
-docs:     Documentação
-refactor: Refatoração sem alteração funcional
-tests:    Criação ou ajuste de testes
-```
-
-### Exemplos
-
-```text
-feat: adicionar filtro por município
-fix: corrigir validação de data
-refactor: otimizar consulta SQL
-```
----
-
-## Branches
-
-### Funcionalidades
-
-```text
-feat/backend/<nome-funcionalidade>
-feat/frontend/<nome-funcionalidade>
-```
-
-### Correções
-
-```text
-fix/backend/<nome-correcao>
-fix/frontend/<nome-correcao>
-```
-
-### Exemplos
-
-```text
-feat/backend/consulta-gta
-feat/frontend/dashboard
-fix/backend/erro-data
-```
-
----
-
-## Pull Requests
-
-### Regras
-
-* Todo merge deve ser realizado via Pull Request.
-* Não realizar merge direto na branch principal.
-
-### Estrutura
-
-**Título**
-
-```text
-<tipo>: <descrição>
-```
-
-Exemplo:
-
-```text
-feat: adicionar consulta por município
-```
-
-**Conteúdo**
-
-```text
-Regra de Negócio:
-<identificador ou Não se aplica>
-
-Tipo:
-feat | fix | refactor
-
-Descrição:
-- Alteração 1
-- Alteração 2
-- Alteração 3
-```
-
----
-
-# Tecnologias Utilizadas
+# 🛠️ Tecnologias Utilizadas
 
 ## Backend
 
@@ -195,7 +108,7 @@ Descrição:
 
 ---
 
-# Organização do Projeto
+# 📂 Organização do Projeto
 
 ## Estrutura de Pastas
 
@@ -203,7 +116,7 @@ Descrição:
 
 ---
 
-# Segurança
+# 🔒 Segurança
 
 O sistema utilizará mecanismos modernos de autenticação e autorização para proteger os dados acadêmicos dos usuários.
 
@@ -217,7 +130,7 @@ Principais recursos previstos:
 
 ---
 
-# Documentação da API
+# 📄 Documentação da API
 
 A API REST será documentada automaticamente através do Swagger/OpenAPI.
 
@@ -225,7 +138,7 @@ A API REST será documentada automaticamente através do Swagger/OpenAPI.
 
 ---
 
-# Qualidade de Software
+# 🧪 Qualidade de Software
 
 O projeto seguirá boas práticas de desenvolvimento, incluindo:
 
@@ -239,13 +152,13 @@ O projeto seguirá boas práticas de desenvolvimento, incluindo:
 
 ---
 
-# Status do Projeto
+# 📌 Status do Projeto
 
-Em desenvolvimento.
+🚧 Em desenvolvimento.
 
 ---
 
-# Equipe de Desenvolvimento
+# 👥 Equipe de Desenvolvimento
 
 * Erick David Forzan Pereira
 * Livia Maria Almeida Silva
