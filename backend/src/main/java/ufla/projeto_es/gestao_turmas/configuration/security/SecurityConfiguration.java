@@ -39,7 +39,7 @@ public class SecurityConfiguration {
 
     @Bean
     public RoleHierarchy roleHierarchy() {
-        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_USER");
+        return RoleHierarchyImpl.fromHierarchy("ROLE_ADMIN > ROLE_PROFESSOR\nROLE_ADMIN > ROLE_ALUNO");
     }
 
     @Bean
@@ -78,11 +78,11 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
 
                         // GESTÃO DE USUÁRIOS
-                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/me").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/atualizar-senha/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuario/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuario").hasRole("PROFESSOR")
 
                         // Regras genéricas de ADMIN para usuários (Delete, Update geral, Listar todos)
-                        .requestMatchers("/api/v1/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/usuario/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated())
 

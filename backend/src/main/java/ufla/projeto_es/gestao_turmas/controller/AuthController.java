@@ -46,9 +46,6 @@ public class AuthController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     public ResponseEntity<UsuarioResponseDTO> register(@RequestBody @Valid UsuarioRequestDTO requestDTO) {
-
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
         UsuarioResponseDTO response = this.authService.register(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
