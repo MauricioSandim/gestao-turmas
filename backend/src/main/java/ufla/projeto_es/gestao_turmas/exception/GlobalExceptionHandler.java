@@ -5,6 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -57,33 +61,33 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
     }
 
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<ProblemDetail> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
-//        ProblemDetail problemDetail = buildProblemDetail("Unauthorized", "Email ou senha inválidos.", request, HttpStatus.UNAUTHORIZED);
-//
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
-//    }
-//
-//    @ExceptionHandler(DisabledException.class)
-//    public ResponseEntity<ProblemDetail> handleDisabledException(DisabledException ex, HttpServletRequest request) {
-//        ProblemDetail problemDetail = buildProblemDetail("Forbidden", "Usuário desabilitado.", request, HttpStatus.FORBIDDEN);
-//
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail);
-//    }
-//
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
-//        ProblemDetail problemDetail = buildProblemDetail("Forbidden", "Acesso negado. Você não possui permissão para este recurso.", request, HttpStatus.FORBIDDEN);
-//
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail);
-//    }
-//
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<ProblemDetail> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
-//        ProblemDetail problemDetail = buildProblemDetail("Unauthorized", "Falha na autenticação.", request, HttpStatus.UNAUTHORIZED);
-//
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
-//    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ProblemDetail> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Unauthorized", "Email ou senha inválidos.", request, HttpStatus.UNAUTHORIZED);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ProblemDetail> handleDisabledException(DisabledException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Forbidden", "Usuário desabilitado.", request, HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Forbidden", "Acesso negado. Você não possui permissão para este recurso.", request, HttpStatus.FORBIDDEN);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ProblemDetail> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Unauthorized", "Falha na autenticação.", request, HttpStatus.UNAUTHORIZED);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleGenericException(Exception ex, HttpServletRequest request) {
