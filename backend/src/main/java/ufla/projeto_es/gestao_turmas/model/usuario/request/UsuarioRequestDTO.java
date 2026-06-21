@@ -1,0 +1,14 @@
+package ufla.projeto_es.gestao_turmas.model.usuario.request;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record UsuarioRequestDTO(@NotBlank(message = "É obrigatório informar o nome do usuário") String nome,
+
+                                @NotBlank(message = "É obrigatório informar o email do usuário") @Email(message = "Email inválido") String email,
+
+                                @NotBlank(message = "É obrigatório informar a senha do usuário") @Size(min = 8, message = "A Senha deve ter no minimo 8 caracteres") String senha,
+
+                                @NotBlank(message = "É obrigatório informar o role do usuário") String role) {
+}
