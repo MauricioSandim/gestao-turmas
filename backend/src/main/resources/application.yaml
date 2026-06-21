@@ -1,0 +1,60 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: gestao-turmas
+
+  datasource:
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST}:${SPRING_DATASOURCE_PORT}/${SPRING_DATASOURCE_DATABASE}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    out-of-order: false
+    locations: classpath:db/migration
+    placeholders:
+      defaultAdminName: "${DEFAULT_ADMIN_NAME}"
+      defaultAdminEmail: "${DEFAULT_ADMIN_EMAIL}"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+api:
+  security:
+    jwt:
+      secret: ${API_SECURITY_JWT_SECRET}
+    token:
+      recovery-secret: ${API_SECURITY_TOKEN_RECOVERY_SECRET}
+      recovery-expiration-minutes: ${API_SECURITY_TOKEN_RECOVERY_EXPIRATION_MINUTES:15}
+  initializer:
+    default-admin-name: ${DEFAULT_ADMIN_NAME}
+    default-admin-email: ${DEFAULT_ADMIN_EMAIL}
+    default-admin-password: ${DEFAULT_ADMIN_PASSWORD}
+  frontend:
+    url: ${API_FRONTEND_URL}
+  email:
+    from: ${API_EMAIL_FROM}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info
