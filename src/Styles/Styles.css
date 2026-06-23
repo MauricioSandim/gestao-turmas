@@ -14,9 +14,6 @@
     
 }
 
-
-/* Tela de Login */
-
 .Titulo {
 
     color: #8D2222;
@@ -87,7 +84,7 @@
 .Formulario {
   display: grid;
   justify-content: center;
-  gap: 5vh;
+  gap: 2vh;
 }
 
 .Crud {
@@ -111,20 +108,20 @@
   position: relative;
 }
 
-/* O Campo de Input */
 .InputForm {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.2rem;
   padding: 12px 16px;
   background-color: #BDBDBD; 
   border: 1px solid #a3a3a3;
-  border-radius: 12px; /* Bordas arredondadas como a janela */
+  border-radius: 12px;
   color: #000000;
   transition: all 0.3s ease;
   outline: none;
+  width: 20vw;
 }
 
-/* Efeito de Foco (Quando clica no campo) */
+
 .input-field:focus {
   background-color: #ffffff;
   border-color: var(--accent-color);
@@ -138,9 +135,8 @@
   align-items: center;
 }
 
-/* Estilo para o Botão*/
 .login-button {
-  width: 150px;
+  width: 10vw;
   height: 40px;
   margin-top: 10px;
   margin-right: 2px;
@@ -189,14 +185,31 @@
   transform: scale(0.98);
 }
 
+.aAcao {
 
-/* Customizações para a Listagem do CRUD */
+  width: 100%;
+  height: 10%;
+  margin-right: 2px;
+  padding: 6px;
+  background-color: #8D2222;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+
+}
 
 .ListaContainer {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 22vw;
+  width: 50vw;
   min-width: 290px;
   max-height: 45vh;
   overflow-y: auto;
@@ -272,7 +285,6 @@
   height: 100vh;
 }
 
-/* Customização do Menu Lateral */
 .MenuLateralEsquerdo {
   display: flex;
   flex-direction: column;
@@ -284,7 +296,6 @@
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.03);
 }
 
-/* Área superior do Menu Lateral */
 .MenuLateralTopo {
   width: 100%;
   margin-bottom: 35px; 
