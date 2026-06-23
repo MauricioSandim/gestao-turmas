@@ -1,32 +1,41 @@
 import { Link } from "react-router-dom"
 import "../Styles/Styles.css"
 import { useState } from "react";
-
+import Input from "../components/Input";
+import Button from "../components/Button";
 import api from '../services/api';
 
 
 function CriarConta () {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [nome, setNome] = useState('');
+  const [role, setRole] = useState('ALUNO');
 
 const handleCriarConta = async (e) => {
+
     e.preventDefault();
 
     try {
 
-      const response = await api.post('/api/v1/auth/register', { username, password });
+      const response = await api.post('/api/v1/auth/register', { email, senha, nome, role });
       
       const token = response.data.token;
+
       localStorage.setItem('token', token);
       
       alert('Conta criada com sucesso!');
+
       window.location.href = '/login';
+
     } catch (error) {
       console.error("Erro ao criar conta", error);
+
       alert('Usuário ou senha inválidos.');
+
     }
+
   };
 
   return(
@@ -41,21 +50,53 @@ const handleCriarConta = async (e) => {
 
             <form className="Formulario" id="form" autoComplete="on" onSubmit={handleCriarConta}>
 
-                <div className="Input">
+                <Input 
+                onChange={e => setNome(e.target.value)}
+                value={nome}
+                name="nome" 
+                type="nome" 
+                id="nome" 
+                autoComplete="nome" 
+                required maxLength={30} 
+                placeholder='Nome'
+                />
 
-                    <input className="InputForm" onChange={e => setUsername(e.target.value)} name="email" type="email" id="email" autoComplete="email" required maxLength={30} placeholder='E-mail'></input>
+                <Input 
+                onChange={e => setEmail(e.target.value)} 
+                value={email}
+                name="email" 
+                type="email" 
+                id="email" 
+                autoComplete="email" 
+                required 
+                maxLength={30} 
+                placeholder="E-mail" 
+                />
 
-                </div>
+                <Input 
+                onChange={e => setSenha(e.target.value)} 
+                value={senha}
+                name="password" 
+                type="password" 
+                id="password" 
+                autoComplete="current-password" 
+                required 
+                minLength={8} 
+                maxLength={20} 
+                placeholder="Senha" 
+                />
 
-                <div className="Input">
+                <select className="InputForm" value={role} onChange={e => setRole(e.target.value)}>
 
-                    <input className="InputForm" onChange={e => setPassword(e.target.value)} name="password" type="password" id="password" autoComplete="current-password" required minLength={8}maxLength={20} placeholder='Senha'></input>
+                  <option value={"ALUNO"}>Aluno</option>
 
-                </div>
+                  <option value={"PROFESSOR"}>Professor</option>
+                  
+                </select>
 
                 <div className="ContinuaTodo">
 
-                    <button className="login-button" id="Continua" type="submit">Continuar</button>
+                  <Button id="Continua" type="submit">Continuar</Button>
 
                 </div>
 
