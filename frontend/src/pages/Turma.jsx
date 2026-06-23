@@ -10,7 +10,6 @@ function Turmas() {
   const [nome, setNome] = useState("");
   const [editingId, setEditingId] = useState(null);
 
-  // Executa automaticamente quando a tela abre
   useEffect((e) => {
 
     fetchTurmas();
@@ -26,9 +25,7 @@ function Turmas() {
 
     } catch (error) {
 
-      console.error("Erro detalhado do backend:", error.response);
-
-      alert(`Erro ${error.response?.status}: Falha ao carregar turmas.`);
+      alert('Erro: Falha ao carregar turmas.');
 
     }
 
