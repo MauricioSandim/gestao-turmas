@@ -1,0 +1,322 @@
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Playfair Display', serif;
+}
+
+#root {
+
+    width: 100%;
+    height: 100%;
+
+    
+}
+
+.Titulo {
+
+    color: #8D2222;
+
+}
+
+.Login {
+
+    color: #ffffff;
+    text-decoration: underline;
+    /* tirar linha de baixo do link */
+    text-decoration-color: transparent;
+
+}
+
+.BOX {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.TelaConta {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  background-color: #B44444;
+  justify-items: center;
+  align-items: center;
+}
+
+.FormularioTodo {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  background-color: #f3eee6;
+  height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  min-width: 350px;
+}
+
+.TurmasTodo {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  width: 60vw;
+  background-color: #f3eee6;
+  height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  min-width: 350px;
+}
+
+.Titulo {
+  text-align: center;
+}
+
+.TituloTurmas {
+  text-align: center;
+  left: 0;
+}
+
+.Formulario {
+  display: grid;
+  justify-content: center;
+  gap: 2vh;
+}
+
+.Crud {
+
+  display: grid;
+  justify-content: center;
+  gap: 5vh;
+  height: 100%;
+
+}
+
+.LoginTodo2 {
+  display: grid;
+  justify-content: center;
+}
+
+.Input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.InputForm {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  padding: 12px 16px;
+  background-color: #BDBDBD; 
+  border: 1px solid #a3a3a3;
+  border-radius: 12px;
+  color: #000000;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 20vw;
+}
+
+
+.input-field:focus {
+  background-color: #ffffff;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(139, 94, 60, 0.1); 
+  transform: translateY(-2px);
+}
+
+.ContinuaTodo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button {
+  width: 10vw;
+  height: 40px;
+  margin-top: 10px;
+  margin-right: 2px;
+  padding: 6px;
+  background-color: #8D2222;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.login-button:hover {
+  background-color: #581515; 
+  transform: scale(1.02);
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+.EsferaDoBortão {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 40px;
+  background-color: #8D2222;
+  border-radius: 20px; 
+  transition: background-color 0.3s, transform 0.2s;
+
+}
+
+.EsferaDoBortão:hover {
+  background-color: #581515; 
+  transform: scale(1.02);
+}
+
+.EsferaDoBortão:active {
+  transform: scale(0.98);
+}
+
+.aAcao {
+
+  width: 100%;
+  height: 10%;
+  margin-right: 2px;
+  padding: 6px;
+  background-color: #8D2222;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  text-decoration: none;
+  text-align: center;
+
+}
+
+.ListaContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 50vw;
+  min-width: 290px;
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.ItemTurma {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #BDBDBD;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #a3a3a3;
+}
+
+.InfoTurma {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.TxtNomeTurma {
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+  color: #8D2222;
+  font-size: 1.1rem;
+}
+
+.TxtCursoTurma {
+  font-family: 'Cormorant Garamond', serif;
+  color: #2c2c2c;
+  font-size: 1rem;
+}
+
+.AcoesTurma {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.LinkAcao {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #8D2222;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.LinkAcao:hover {
+  color: #581515;
+}
+
+.LinkExcluir {
+  color: #581515;
+}
+
+.LinkExcluir:hover {
+  color: #000000;
+}
+
+.LayoutTelaCompleta {
+  display: flex; 
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+.LayoutTelaCompleta .BOX {
+  flex-grow: 1;
+  height: 100vh;
+}
+
+.MenuLateralEsquerdo {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  min-width: 250px;
+  background-color: #ffffff;
+  padding: 30px 20px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.03);
+}
+
+.MenuLateralTopo {
+  width: 100%;
+  margin-bottom: 35px; 
+  display: flex;
+  justify-content: center;
+}
+
+
+.btn-sidebar-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+  text-decoration: none;
+  margin-top: 0;
+}
+
+
+.MenuLateralEspacoBotoes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
+  flex-grow: 1; 
+}
