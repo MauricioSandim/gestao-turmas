@@ -198,7 +198,45 @@ Descrição:
 
 ## Estrutura de Pastas
 
-> **Preencher durante o desenvolvimento**
+```
+.
+├── backend
+│   ├── *
+│   └── README.md
+├── docs
+│   ├── diagramas
+│   │   ├── diagrama-casos-de-uso.svg
+│   │   ├── diagrama-classes.svg
+│   │   ├── Diagrama_de_Implantacao.svg
+│   │   ├── diagrama-pacotes-backend.svg
+│   │   ├── diagrama-pacotes-frontend.svg
+│   │   ├── DS_Atualizar_Turma.svg
+│   │   ├── DS_Consultar_Nota.svg
+│   │   ├── DS_Consultar_Turma.svg
+│   │   ├── DS-Criar_Nota.svg
+│   │   ├── DS_Criar_Turma.svg
+│   │   ├── DS_Deletar_Nota1.svg
+│   │   ├── DS_Deletar_Nota.svg
+│   │   ├── DS_Deletar_Turma.svg
+│   │   └── editaveis
+│   │       ├── diagrama-casos-de-uso.drawio
+│   │       ├── diagrama-classes.drawio
+│   │       ├── Diagrama_de_Implantacao.drawio
+│   │       ├── diagrama-pacotes-backend.drawio
+│   │       ├── diagrama-pacotes-frontend.drawio
+│   │       └── diagramasDeSequencia.drawio
+│   ├── documento_requisitos
+│   │   ├── documento_requisitos.docx
+│   │   └── documento_requisitos.pdf
+│   ├── padroes_adotados
+│   │   ├── boas_praticas.md
+│   │   └── regras_de_verificacao_e_analise_de_requisitos.md
+│   └── README.md
+├── frontend
+|   ├── *
+│   └── README.md
+└── README.md
+```
 
 ---
 
