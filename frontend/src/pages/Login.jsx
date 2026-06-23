@@ -1,31 +1,40 @@
 import { Link } from "react-router-dom"
 import "../Styles/Styles.css"
 import { useState } from "react";
-
+import Input from "../components/Input";
+import Button from "../components/Button";
 import api from '../services/api';
 
 
 function Login () {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
 const handleLogin = async (e) => {
+
     e.preventDefault();
 
     try {
 
-      const response = await api.post('/api/v1/auth/login', { username, password });
+      const response = await api.post('/api/v1/auth/login', { email, senha });
       
       const token = response.data.token;
+    
       localStorage.setItem('token', token);
       
       alert('Login realizado com sucesso!');
+
       window.location.href = '/';
+
     } catch (error) {
+
       console.error("Erro ao fazer login", error);
+
       alert('Usuário ou senha inválidos.');
+
     }
+
   };
 
   return(
@@ -40,21 +49,34 @@ const handleLogin = async (e) => {
 
             <form className="Formulario" id="form" autoComplete="on" onSubmit={handleLogin}>
 
-              <div className="Input">
+              <Input 
+              onChange={e => setEmail(e.target.value)} 
+              value={email}
+              name="email" 
+              type="email" 
+              id="email" 
+              autoComplete="email" 
+              required 
+              maxLength={30} 
+              placeholder="E-mail" 
+              />
 
-                <input className="InputForm" onChange={e => setUsername(e.target.value)} name="email" type="email" id="email" autoComplete="email" required maxLength={30} placeholder='E-mail'></input>
-
-              </div>
-
-              <div className="Input">
-
-                <input className="InputForm" onChange={e => setPassword(e.target.value)} name="password" type="password" id="password" autoComplete="current-password" required minLength={8}maxLength={20} placeholder='Senha'></input>
-
-              </div>
+              <Input 
+              onChange={e => setSenha(e.target.value)} 
+              value={senha}
+              name="password" 
+              type="password" 
+              id="password" 
+              autoComplete="current-password" 
+              required 
+              minLength={8} 
+              maxLength={20} 
+              placeholder="Senha" 
+              />
 
               <div className="ContinuaTodo">
 
-                <button className="login-button" id="Continua" type="submit">Continuar</button>
+                <Button id="Continua" type="submit">Continuar</Button>
 
               </div>
 

@@ -45,16 +45,23 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:4200"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
+        
+        // 1. Libera a URL de origem do seu front-end React/Vite
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); 
+        
+        // 2. Libera os métodos HTTP que o front-end fará
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        
+        // 3. Permite os cabeçalhos necessários, principalmente o Authorization para o JWT
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
+        
+        // 4. Necessário se for enviar credenciais/tokens de forma embutida
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
 
+        // 5. Aplica essa regra globalmente para todos os endpoints (/**)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        
         return source;
     }
 
