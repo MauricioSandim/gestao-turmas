@@ -1,0 +1,41 @@
+services:
+  app:
+    build: .
+    container_name: gt-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - SPRING_DATASOURCE_HOST=db
+    env_file:
+      - .env
+    networks:
+      - gt-network
+
+  db:
+    image: postgres:${POSTGRES_VERSION}-alpine
+    container_name: gt-db
+    environment:
+      - POSTGRES_DB=${SPRING_DATASOURCE_DATABASE}
+      - POSTGRES_USER=${SPRING_DATASOURCE_USERNAME}
+      - POSTGRES_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "${SPRING_DATASOURCE_PORT}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "psql -U ${SPRING_DATASOURCE_USERNAME} -d ${SPRING_DATASOURCE_DATABASE} -c 'SELECT 1'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gt-network
+
+volumes:
+  db-data:
+
+networks:
+  gt-network:
+    driver: bridge
