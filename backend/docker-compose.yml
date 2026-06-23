@@ -1,4 +1,19 @@
 services:
+  app:
+    build: .
+    container_name: gt-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - SPRING_DATASOURCE_HOST=db
+    env_file:
+      - .env
+    networks:
+      - gt-network
+
   db:
     image: postgres:${POSTGRES_VERSION}-alpine
     container_name: gt-db

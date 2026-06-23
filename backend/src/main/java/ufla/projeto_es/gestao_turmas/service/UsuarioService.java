@@ -17,7 +17,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     public List<Usuario> findAllByRole(RoleEnum role) {
-        return usuarioRepository.findAllByRole_Nome(role);
+        return usuarioRepository.findAllByRoleNome(role);
     }
 
     public Usuario findById(Long id) {
