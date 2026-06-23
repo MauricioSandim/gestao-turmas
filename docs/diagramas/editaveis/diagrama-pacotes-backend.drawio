@@ -1,0 +1,94 @@
+<mxfile host="app.diagrams.net" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36">
+  <diagram name="Page-1" id="b5b7bab2-c9e2-2cf4-8b2a-24fd1a2a6d21">
+    <mxGraphModel dx="1131" dy="1795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="6e0c8c40b5770093-72" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=194;tabHeight=22;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fillColor=none;fontFamily=Verdana;fontSize=10;align=center;" value="" vertex="1">
+          <mxGeometry height="905" width="1140" x="620" y="-20" as="geometry" />
+        </mxCell>
+        <mxCell id="6e0c8c40b5770093-6" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="70" width="130" x="850" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="6e0c8c40b5770093-4" parent="6e0c8c40b5770093-6" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Controller" vertex="1">
+          <mxGeometry height="70" width="130" as="geometry" />
+        </mxCell>
+        <mxCell id="6e0c8c40b5770093-73" parent="1" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=10;fontFamily=Verdana" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;Backend&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="170" x="620" y="-20" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-1" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Repository" vertex="1">
+          <mxGeometry height="70" width="130" x="960" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-10" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-2" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-1" value="chama consultas/persistências&amp;nbsp;&lt;div&gt;para o BD&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-19" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-2" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-3" value="chama mapeadores para gerar entidades a partir&lt;div&gt;de dtos e realizar cópias de objetos&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-21" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-2" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-6" value="lança exceções personalizadas e&lt;div&gt;usa handler para response adequada&lt;/div&gt;&lt;div&gt;em caso de lançamento de exceção&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1350" y="570" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-2" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Service" vertex="1">
+          <mxGeometry height="70" width="130" x="960" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-22" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-3" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-6" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;usa handler para response adequada&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;em caso de lançamento de exceção&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-3" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Mapper" vertex="1">
+          <mxGeometry height="70" width="130" x="1220" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-4" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Model" vertex="1">
+          <mxGeometry height="70" width="130" x="660" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-23" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-5" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-6" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;lança exceções personalizadas e&lt;/span&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;usa handler para response adequada&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;em caso de lançamento de exceção&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-5" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Securiry" vertex="1">
+          <mxGeometry height="80" width="130" x="1590" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-6" parent="1" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=50;tabHeight=17;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=10;align=center;" value="Exception" vertex="1">
+          <mxGeometry height="70" width="130" x="1580" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-8" edge="1" parent="1" source="6e0c8c40b5770093-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-2" value="chama regras de negócio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-11" edge="1" parent="1" source="6e0c8c40b5770093-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-12" connectable="0" parent="2BjR9pEcgZObCOyUEmXN-11" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="chama verificações de autenticação e autorização" vertex="1">
+          <mxGeometry relative="1" x="-0.0616" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-13" edge="1" parent="1" source="6e0c8c40b5770093-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-15" connectable="0" parent="2BjR9pEcgZObCOyUEmXN-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="consulta entidades e dtos para receber&amp;nbsp;&lt;div&gt;requests e retornar os response&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1608" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-14" edge="1" parent="1" source="6e0c8c40b5770093-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=30.25;entryPerimeter=0;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-3" value="chama mapeadores para gerar dtos de response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-18" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-2" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=130;entryDy=43.5;entryPerimeter=0;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-4" value="consulta entidades e dtos para&lt;div&gt;&amp;nbsp;aplicação das regras de negócio&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-27" edge="1" parent="1" source="6e0c8c40b5770093-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-6" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;usa handler para&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;response adequada&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237)); background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;em caso de&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237)); background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;lançamento de exceção&lt;/span&gt;&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2BjR9pEcgZObCOyUEmXN-29" edge="1" parent="1" source="2BjR9pEcgZObCOyUEmXN-4" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.317;entryY=0.985;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;dashed=1;" target="2BjR9pEcgZObCOyUEmXN-6" value="&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;usa handler para&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;response adequada&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(237, 237, 237)); background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;em caso de&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;lançamento de exceção&lt;/div&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1290" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
