@@ -94,10 +94,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/turmas/**").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/turmas/**").hasRole("PROFESSOR")
 
+                        .requestMatchers(HttpMethod.GET, "/api/v1/aluno/**").hasRole("PROFESSOR")
+
                         // Regras genéricas de ADMIN para usuários (Delete, Update geral, Listar todos)
                         .requestMatchers("/api/v1/usuario/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated())
+                        .anyRequest().hasRole("ADMIN"))
 
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
