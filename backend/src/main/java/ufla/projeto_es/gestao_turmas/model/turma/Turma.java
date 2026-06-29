@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import ufla.projeto_es.gestao_turmas.exception.NotFoundException;
 import ufla.projeto_es.gestao_turmas.model.baseEntity.OwnedEntity;
+import ufla.projeto_es.gestao_turmas.model.horarioAula.HorarioAula;
 import ufla.projeto_es.gestao_turmas.model.matricula.Matricula;
 import ufla.projeto_es.gestao_turmas.model.type.RoleEnum;
 import ufla.projeto_es.gestao_turmas.model.usuario.Usuario;
@@ -31,7 +32,30 @@ public class Turma extends OwnedEntity<Long> {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "turma",orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "horario_aula", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<HorarioAula> horariosAula;
+
+    public void addHorarioAula(HorarioAula horarioAula) {
+        horariosAula.forEach((e) -> {
+            if (e.getHora().equals(horarioAula.getHora()) && e.getDiaSemana() == horarioAula.getDiaSemana())
+                throw new IllegalArgumentException("Horario aula já cadastrado para turma de id:" + this.getId());
+        });
+
+        horarioAula.setTurma(this);
+
+        horariosAula.add(horarioAula);
+    }
+    
+
+
+    public void removeAluno(Long id) {
+        if (!horariosAula.removeIf((e) -> Objects.equals(e.getId(), id))) {
+            throw new NotFoundException("Horario aula com id: " + id + " não matriculado na turma com id: " + this.getId());
+        }
+
+    }
+
+    @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Matricula> matriculas;
 
     public List<Usuario> getAlunos() {
