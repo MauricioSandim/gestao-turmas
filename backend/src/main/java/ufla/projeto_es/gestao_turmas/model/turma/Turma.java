@@ -32,7 +32,9 @@ public class Turma extends OwnedEntity<Long> {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "horario_aula", orphanRemoval = true, cascade = CascadeType.ALL)
+
+    // HORARIO AULA
+    @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<HorarioAula> horariosAula;
 
     public void addHorarioAula(HorarioAula horarioAula) {
@@ -45,16 +47,27 @@ public class Turma extends OwnedEntity<Long> {
 
         horariosAula.add(horarioAula);
     }
-    
 
-
-    public void removeAluno(Long id) {
+    public void removeHorarioAula(Long id) {
         if (!horariosAula.removeIf((e) -> Objects.equals(e.getId(), id))) {
-            throw new NotFoundException("Horario aula com id: " + id + " não matriculado na turma com id: " + this.getId());
+            throw new NotFoundException("Horario aula com id: " + id + " não existente na turma com id: " + this.getId());
         }
-
     }
 
+    public void updateHorarioAula(Long id, HorarioAula horarioAula) {
+        horariosAula.forEach((e) -> {
+            if (e.getHora().equals(horarioAula.getHora()) && e.getDiaSemana() == horarioAula.getDiaSemana())
+                throw new IllegalArgumentException("Horario aula já cadastrado para turma de id:" + this.getId());
+        });
+
+        HorarioAula horarioAulaAtual = horariosAula.stream().filter((e) -> Objects.equals(e.getId(), id)).findFirst().orElseThrow(() -> new NotFoundException("Horario aula com id: " + id + " não existente na turma com id: " + this.getId()));
+
+        horarioAulaAtual.setHora(horarioAula.getHora());
+        horarioAulaAtual.setDiaSemana(horarioAula.getDiaSemana());
+    }
+
+
+    // MATRICULA
     @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Matricula> matriculas;
 
