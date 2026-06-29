@@ -1,5 +1,6 @@
 package ufla.projeto_es.gestao_turmas.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class TurmaController {
     private final TurmaMapper turmaMapper;
 
     @GetMapping
+    @Operation(summary = "Consultar turmas de um professor")
     public ResponseEntity<List<TurmaSummaryResponseDTO>> getTurmas(@AuthenticationPrincipal Usuario usuario) {
         List<Turma> turmas = turmaService.findAllByUsuarioId(usuario);
 
@@ -33,6 +35,7 @@ public class TurmaController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Consultar uma turma de um professor")
     public ResponseEntity<TurmaResponseDTO> getTurma(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         Turma turma = turmaService.findById(id, usuario);
 
@@ -40,6 +43,7 @@ public class TurmaController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar turma para um professor")
     public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody CreateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         Turma turma = turmaService.criar(requestDTO, usuario);
 
@@ -47,6 +51,7 @@ public class TurmaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Modificar turma para um professor")
     public ResponseEntity<TurmaResponseDTO> atualizarTurma(@PathVariable Long id, @RequestBody UpdateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         Turma turma = turmaService.atualizar(id, requestDTO, usuario);
 
@@ -54,6 +59,7 @@ public class TurmaController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Criar turma para um professor")
     public ResponseEntity<TurmaResponseDTO> deleteTurma(@PathVariable Long id, @AuthenticationPrincipal Usuario usuario) {
         turmaService.delete(id, usuario);
 

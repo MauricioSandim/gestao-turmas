@@ -36,6 +36,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Mostrar informações do usuário logado")
     public ResponseEntity<UsuarioResponseDTO> getMe(@AuthenticationPrincipal Usuario usuario){
         return ResponseEntity.ok(usuarioMapper.toResponse(usuario));
     }
