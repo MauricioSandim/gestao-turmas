@@ -5,6 +5,10 @@ import Turmas from './pages/Turma.jsx'
 import CriarConta from './pages/CriarConta.jsx'
 import SalaDaTurma from './pages/SalaDaTurma.jsx'
 import Notas from './pages/Notas.jsx'
+import Avaliacoes from './pages/Avaliacoes.jsx'
+import Faltas from './pages/Faltas.jsx'
+import Matriculas from './pages/Matriculas.jsx'
+import Horarios from './pages/Horarios.jsx'
 import { BrowserRouter, Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
@@ -31,6 +35,15 @@ function App() {
         <Route path='/turma/:nomeTurma' element={<SalaDaTurma/>}>
 
           <Route path='notas' element={<Notas/>}/>
+
+          <Route path='matriculas' element={<Matriculas/>}/>
+
+          <Route path='horarios' element={<Horarios/>}/>
+
+          <Route path='avaliacoes' element={<Avaliacoes/>}/>
+
+          <Route path='faltas' element={<Faltas/>}/>
+
 
         </Route>
 
