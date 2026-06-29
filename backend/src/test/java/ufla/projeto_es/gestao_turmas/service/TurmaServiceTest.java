@@ -1,0 +1,337 @@
+package ufla.projeto_es.gestao_turmas.service;
+
+import org.junit.jupiter.api.Assertions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
+import org.mapstruct.factory.Mappers;
+
+import ufla.projeto_es.gestao_turmas.exception.NotFoundException;
+import ufla.projeto_es.gestao_turmas.exception.turma.TurmaComNomesIguaisException;
+import ufla.projeto_es.gestao_turmas.mapper.TurmaMapper;
+import ufla.projeto_es.gestao_turmas.model.roles.Role;
+import ufla.projeto_es.gestao_turmas.model.turma.Turma;
+import ufla.projeto_es.gestao_turmas.model.turma.request.CreateTurmaRequestDTO;
+import ufla.projeto_es.gestao_turmas.model.turma.request.UpdateTurmaRequestDTO;
+import ufla.projeto_es.gestao_turmas.model.type.RoleEnum;
+import ufla.projeto_es.gestao_turmas.model.usuario.Usuario;
+import ufla.projeto_es.gestao_turmas.repository.TurmaRepository;
+
+
+@ExtendWith(MockitoExtension.class)
+class TurmaServiceTest {
+
+    @Mock
+    private TurmaRepository turmaRepository;
+
+    private TurmaMapper turmaMapper;
+
+    private TurmaService turmaService;
+
+
+    @BeforeEach
+    void setup() {
+        turmaMapper = Mappers.getMapper(TurmaMapper.class);
+
+        turmaService = new TurmaService(turmaRepository, turmaMapper);
+    }
+
+
+    @Test
+    void deveCriarTurmaComSucesso() {
+
+        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+        usuario.setRole(role);
+
+
+        when(
+            turmaRepository.existsByNomeAndUsuario_Id(
+                "2°Ano A",
+                1L
+            )
+        ).thenReturn(false);
+
+
+        when(turmaRepository.save(any()))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+
+        Turma turmaCriada = turmaService.criar(dto, usuario);
+
+
+        Assertions.assertNotNull(turmaCriada);
+
+        Assertions.assertEquals(
+            "2°Ano A",
+            turmaCriada.getNome()
+        );
+
+        Assertions.assertEquals(
+            usuario,
+            turmaCriada.getUsuario()
+        );
+
+
+        verify(turmaRepository, times(1)).save(any(Turma.class));
+    }
+
+    @Test
+    void naoDeveCriarTurmaSeUsuarioNaoForProfessor() {
+
+        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        Role role = new Role();
+        role.setNome(RoleEnum.ALUNO);
+        usuario.setRole(role);
+
+
+        AccessDeniedException thrown =  Assertions.assertThrows(
+            AccessDeniedException.class,
+            () -> turmaService.criar(dto, usuario)
+        );
+
+        Assertions.assertEquals("Acesso negado", thrown.getMessage());
+
+
+        verify(turmaRepository, never()).save(any());
+    }
+
+    @Test
+    void naoDeveCriarTurmaComNomeExistente() {
+
+        String nome = "2°Ano A";
+
+        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO(nome);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+        usuario.setRole(role);
+
+
+        when(
+            turmaRepository.existsByNomeAndUsuario_Id(
+                nome,
+                1L
+            )
+        ).thenReturn(true);
+
+
+        TurmaComNomesIguaisException thrown =  Assertions.assertThrows(
+            TurmaComNomesIguaisException.class, () -> {
+                turmaService.criar(dto, usuario);
+            }
+        );
+
+        Assertions.assertEquals("Já existe uma turma com nome: "  + nome, thrown.getMessage());
+
+        verify(turmaRepository, never()).save(any());
+    }
+
+    @Test
+    void deveAtualizarTurmaComSucesso() {
+
+        // Arrange
+        UpdateTurmaRequestDTO dto =
+                new UpdateTurmaRequestDTO("3°Ano A");
+
+
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setRole(role);
+
+
+        Turma turmaExistente = new Turma();
+        turmaExistente.setId(10L);
+        turmaExistente.setNome("2°Ano A");
+        turmaExistente.setUsuario(usuario);
+
+
+        when(
+            turmaRepository.findByIdAndUsuario_Id(
+                10L,
+                1L
+            )
+        ).thenReturn(Optional.of(turmaExistente));
+
+
+        when(turmaRepository.save(any(Turma.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+
+        // Act
+        Turma resultado =
+                turmaService.atualizar(
+                        10L,
+                        dto,
+                        usuario
+                );
+
+
+        // Assert
+
+        assertNotNull(resultado);
+
+        assertEquals(
+                "3°Ano A",
+                resultado.getNome()
+        );
+
+
+        assertEquals(
+                usuario,
+                resultado.getUsuario()
+        );
+
+
+        verify(turmaRepository)
+            .findByIdAndUsuario_Id(10L, 1L);
+
+
+        verify(turmaRepository)
+            .save(turmaExistente);
+    }
+
+    @Test
+    void naoDeveAtualizarTurmaInexistente() {
+
+        UpdateTurmaRequestDTO dto =
+                new UpdateTurmaRequestDTO("3°Ano A");
+
+
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setRole(role);
+
+
+        when(
+            turmaRepository.findByIdAndUsuario_Id(
+                10L,
+                1L
+            )
+        ).thenReturn(Optional.empty());
+
+
+        Assertions.assertThrows(
+            NotFoundException.class,
+            () ->
+                turmaService.atualizar(
+                    10L,
+                    dto,
+                    usuario
+                )
+        );
+
+
+        verify(turmaRepository, never())
+            .save(any());
+    }
+
+    @Test
+    void deveDeletarTurmaComSucesso() {
+
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setRole(role);
+
+
+        Turma turma = new Turma();
+        turma.setId(10L);
+        turma.setUsuario(usuario);
+
+
+        when(
+            turmaRepository.findByIdAndUsuario_Id(
+                10L,
+                1L
+            )
+        ).thenReturn(Optional.of(turma));
+
+
+        // Act
+        turmaService.delete(
+                10L,
+                usuario
+        );
+
+
+        // Assert
+
+        verify(turmaRepository)
+            .findByIdAndUsuario_Id(10L, 1L);
+
+
+        verify(turmaRepository)
+            .delete(turma);
+    }
+
+    @Test
+    void naoDeveDeletarTurmaInexistente() {
+
+        Role role = new Role();
+        role.setNome(RoleEnum.PROFESSOR);
+
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setRole(role);
+
+
+        when(
+            turmaRepository.findByIdAndUsuario_Id(
+                10L,
+                1L
+            )
+        ).thenReturn(Optional.empty());
+
+
+        assertThrows(
+            NotFoundException.class,
+            () ->
+                turmaService.delete(
+                    10L,
+                    usuario
+                )
+        );
+
+
+        verify(turmaRepository, never())
+            .delete(any());
+    }
+}
