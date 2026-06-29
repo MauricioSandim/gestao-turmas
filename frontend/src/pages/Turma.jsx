@@ -165,6 +165,12 @@ function Turmas() {
 
                           <a className="aAcao aExcluir" onClick={() => handleDelete(turma.id)}>Excluir</a>
 
+                          <Link to={`/turma/${turma.nome}`} className="aAcao"> 
+
+                          Entrar
+
+                          </Link>
+
                         </div>
 
                       </div>

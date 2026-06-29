@@ -3,7 +3,9 @@ import './App.css'
 import Login from './pages/Login.jsx'
 import Turmas from './pages/Turma.jsx'
 import CriarConta from './pages/CriarConta.jsx'
-import { BrowserRouter, Router, Routes, Route } from 'react-router-dom';
+import SalaDaTurma from './pages/SalaDaTurma.jsx'
+import Notas from './pages/Notas.jsx'
+import { BrowserRouter, Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,9 +18,21 @@ function App() {
 
         <Route path="/login" element={<Login/>}/>
 
-        <Route path="/" element={<Turmas/>}/>
+        <Route path="/" element={<Navigate to="/turma" replace/>}/>
+        
+        <Route path='/turma' element={<Turmas/>}/>
 
         <Route path="/criarConta" element={<CriarConta/>}/>
+
+      </Routes>
+
+      <Routes>
+
+        <Route path='/turma/:nomeTurma' element={<SalaDaTurma/>}>
+
+          <Route path='notas' element={<Notas/>}/>
+
+        </Route>
 
       </Routes>
 
