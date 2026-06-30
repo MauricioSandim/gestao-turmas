@@ -1,81 +1,129 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { useState, useEffect } from "react";
-import Input from "../components/Input";
 import api from "../services/api";
 
 function Notas() {
   const { turmaId } = useParams();
-
-  // Estados principais
   const [notas, setNotas] = useState([]);
+  const [matriculas, setMatriculas] = useState([]); 
+  const [atividades, setAtividades] = useState([]); 
   const [view, setView] = useState("list");
   const [editingId, setEditingId] = useState(null);
-
-  // Campos dos formulários (Padronizados)
   const [idMatricula, setIdMatricula] = useState("");
   const [valor, setValor] = useState("");
   const [avaliacaoId, setAvaliacaoId] = useState("");
+  const [role, setRole] = useState("");
 
-  // 1. Busca as notas filtradas pela matrícula digitada
+  useEffect(() => {
+    const localRole = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : "";
+    setRole(localRole);
+
+    if (turmaId) {
+      if (localRole === "ALUNO") {
+        fetchDadosAluno();
+      } else {
+        fetchMatriculas();
+        fetchAtividades();
+      }
+    }
+  }, [turmaId]);
+
+  const fetchDadosAluno = async () => {
+    try {
+      const response = await api.get('/api/v1/area-aluno');
+      const dadosTurma = response.data.find(m => String(m.turma?.id) === String(turmaId));
+      if (dadosTurma) {
+        setAtividades(dadosTurma.turma?.atividadesAvaliativas || []);
+        const notasFormatadas = (dadosTurma.notas || []).map(n => ({
+          id: n.id,
+          valor: n.valor,
+          atividadeAvaliativaId: n.atividadeAvaliativa?.id,
+          matriculaId: dadosTurma.id
+        }));
+        setNotas(notasFormatadas);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchMatriculas = async () => {
+    try {
+      const response = await api.get(`/api/v1/turmas/${turmaId}/matricula`);
+      setMatriculas(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchAtividades = async () => {
+    try {
+      const response = await api.get(`/api/v1/turmas/${turmaId}/atividades-avaliativas`);
+      setAtividades(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchNotasPorMatricula = async (e) => {
-    if (e) e.preventDefault(); // Impede a página de recarregar no submit do form
-    if (!idMatricula) return alert("Por favor, digite o ID da matrícula.");
+    if (e) e.preventDefault();
+    if (!idMatricula) return alert("Por favor, selecione um aluno para buscar.");
 
     try {
       const response = await api.get(`/api/v1/turmas/${turmaId}/notas/${idMatricula}`);
-      // Garante que o estado seja sempre uma lista/array para o .map não quebrar
       setNotas(Array.isArray(response.data) ? response.data : [response.data]);
     } catch (error) {
-      console.error("Erro ao carregar notas:", error);
+      console.error(error);
       alert("Erro ao buscar notas para esta matrícula.");
     }
   };
 
-  // 2. Lançar nova nota
   const handleCreate = async (e) => {
     e.preventDefault();
+    const atividadeSelecionada = atividades.find(a => String(a.id) === String(avaliacaoId));
+    if (atividadeSelecionada && Number(valor) > atividadeSelecionada.nota) {
+      alert(`A nota não pode ser maior que o valor máximo da avaliação (${atividadeSelecionada.nota}).`);
+      return;
+    }
+
     try {
-      // Envia para o endpoint correto passando a matrícula na URL e os dados no corpo
-      await api.post(`/api/v1/turmas/${turmaId}/notas/${idMatricula}`, {
-        valor: parseFloat(valor),
-        avaliacaoId: avaliacaoId
-      });
+      await api.post(`/api/v1/turmas/${turmaId}/notas/${idMatricula}?atividadeAvaliativaId=${avaliacaoId}&valor=${valor}`);
       alert("Nota lançada com sucesso!");
       resetForm();
       fetchNotasPorMatricula();
     } catch (error) {
-      console.error("Erro ao lançar nota", error);
+      console.error(error);
       alert("Erro ao lançar nota.");
     }
   };
 
-  // 3. Preparar edição
   const handleEdit = (notaExistente) => {
     setEditingId(notaExistente.id);
     setValor(notaExistente.valor);
-    setAvaliacaoId(notaExistente.avaliacaoId);
+    setAvaliacaoId(notaExistente.atividadeAvaliativaId || notaExistente.avaliacaoId || "");
     setView("edit");
   };
 
-  // 4. Atualizar nota existente
   const handleUpdate = async (e) => {
     e.preventDefault();
+    const atividadeSelecionada = atividades.find(a => String(a.id) === String(avaliacaoId));
+    if (atividadeSelecionada && Number(valor) > atividadeSelecionada.nota) {
+      alert(`A nota não pode ser maior que o valor máximo da avaliação (${atividadeSelecionada.nota}).`);
+      return;
+    }
+
     try {
-      await api.put(`/api/v1/turmas/${turmaId}/notas/${idMatricula}/${editingId}`, {
-        valor: parseFloat(valor),
-        avaliacaoId: avaliacaoId
-      });
-      alert("Nota atualizada com sucesso!");
+      await api.put(`/api/v1/turmas/${turmaId}/notas/${idMatricula}/${editingId}?valor=${valor}`);
+      alert("Nota updated com sucesso!");
       resetForm();
       fetchNotasPorMatricula();
     } catch (error) {
-      console.error("Erro ao atualizar nota", error);
+      console.error(error);
       alert("Erro ao atualizar nota.");
     }
   };
 
-  // 5. Excluir nota
   const handleDelete = async (mId, id) => {
     if (!window.confirm("Deseja realmente excluir esta nota?")) return;
     try {
@@ -83,7 +131,7 @@ function Notas() {
       alert("Nota excluída!");
       fetchNotasPorMatricula();
     } catch (error) {
-      console.error("Erro ao excluir nota", error);
+      console.error(error);
       alert("Erro ao excluir nota.");
     }
   };
@@ -95,62 +143,84 @@ function Notas() {
     setView("list");
   };
 
+  const atividadeSelecionada = atividades.find(a => String(a.id) === String(avaliacaoId));
+  const maxNota = atividadeSelecionada ? atividadeSelecionada.nota : "";
+
   return (
     <div className="Sala">
       {view === "list" && (
         <>
           <div className="ParteSala">
             <h3>👥 Gerenciamento de Notas</h3>
-            <Button className="aAcao" onClick={() => setView("create")}>
-              Cadastrar Nova Nota
-            </Button>
+            {role !== "ALUNO" && (
+              <Button className="aAcao" onClick={() => setView("create")}>
+                Cadastrar Nova Nota
+              </Button>
+            )}
 
-            {/* FORMULÁRIO DE BUSCA - Corrigido sem rodar direto */}
-            <form className="Formulario" onSubmit={fetchNotasPorMatricula}>
-              <Input
-                onChange={(e) => setIdMatricula(e.target.value)}
-                value={idMatricula}
-                name="idMatricula"
-                type="text"
-                id="idMatricula"
-                required
-                placeholder="Digite o ID da Matrícula para buscar"
-              />
-              <button type="submit" className="login-button" style={{ marginTop: "10px" }}>
-                Buscar Notas
-              </button>
-            </form>
+            {role !== "ALUNO" && (
+              <form className="FormularioSelecao" onSubmit={fetchNotasPorMatricula}>
+                <select
+                  className="InputForm"
+                  value={idMatricula}
+                  onChange={(e) => setIdMatricula(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione um Aluno para buscar as notas...</option>
+                  {matriculas.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.aluno?.nome} (Matrícula ID: {m.aluno.id})
+                    </option>
+                  ))}
+                </select>
+                <button type="submit" className="login-button" style={{ marginTop: "10px" }}>
+                  Buscar Notas
+                </button>
+              </form>
+            )}
 
             <table className="Tabela">
               <thead>
                 <tr className="Info">
-                  <th className="Coluna">Aluno (Matrícula)</th>
+                  <th className="Coluna">Aluno</th>
                   <th className="Coluna">Avaliação</th>
                   <th className="Coluna">Nota</th>
-                  <th className="LinhaAcao">Ações</th>
+                  {role !== "ALUNO" && <th className="LinhaAcao">Ações</th>}
                 </tr>
               </thead>
               <tbody>
                 {notas.length === 0 ? (
                   <tr>
-                    <td colSpan="4">Nenhuma nota listada. Digite uma matrícula e busque.</td>
+                    <td colSpan={role === "ALUNO" ? "3" : "4"} style={{ textAlign: "center", padding: "15px" }}>
+                      Nenhuma nota listada.
+                    </td>
                   </tr>
                 ) : (
-                  notas.map((n) => (
-                    <tr key={n.id}>
-                      <td>{n.matriculaId || idMatricula}</td>
-                      <td>{n.avaliacaoId}</td>
-                      <td>{n.valor}</td>
-                      <td>
-                        <button className="aAcao" onClick={() => handleEdit(n)} style={{ marginRight: "10px" }}>
-                          Editar
-                        </button>
-                        <button className="aAcao" onClick={() => handleDelete(n.matriculaId || idMatricula, n.id)}>
-                          Excluir
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  notas.map((n) => {
+                    const dadosMatricula = matriculas.find(m => String(m.id) === String(n.matriculaId || idMatricula));
+                    const dadosAtv = atividades.find(a => String(a.id) === String(n.atividadeAvaliativaId));
+                    const nomeExibicao = role === "ALUNO"
+                      ? (localStorage.getItem('usuario') ? JSON.parse(localStorage.getItem('usuario')) : "")
+                      : (dadosMatricula?.aluno?.nome || `Matrícula: ${n.matriculaId || idMatricula}`);
+
+                    return (
+                      <tr key={n.id}>
+                        <td className="LinhaDado">{nomeExibicao}</td>
+                        <td className="LinhaDado">{dadosAtv?.nome || "Avaliação"}</td>
+                        <td className="LinhaDado">{n.valor}</td>
+                        {role !== "ALUNO" && (
+                          <td className="LinhaAcao">
+                            <button className="aAcao" onClick={() => handleEdit(n)} style={{ marginRight: "10px" }}>
+                              Editar
+                            </button>
+                            <button className="aAcao" onClick={() => handleDelete(n.matriculaId || idMatricula, n.id)}>
+                              Excluir
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -158,43 +228,52 @@ function Notas() {
         </>
       )}
 
-      {(view === "create" || view === "edit") && (
+      {(view === "create" || view === "edit") && role !== "ALUNO" && (
         <>
           <div className="TurmaTodo">
             <h1 className="Titulo">{view === "create" ? "Lançar Nota" : "Editar Nota"}</h1>
 
             <form className="Formulario" onSubmit={view === "create" ? handleCreate : handleUpdate}>
               <div className="Input">
-                {/* Campo Matrícula (obrigatório para saber de quem é a nota) */}
-                <Input
-                  onChange={(e) => setIdMatricula(e.target.value)}
+                <select
+                  className="InputForm"
                   value={idMatricula}
-                  name="idMatricula"
-                  type="text"
+                  onChange={(e) => setIdMatricula(e.target.value)}
                   required
-                  placeholder="ID da Matrícula do Aluno"
-                  disabled={view === "edit"} // Na edição costuma-se travar a matrícula
-                />
+                  disabled={view === "edit"} 
+                >
+                  <option value="">Selecione o Aluno...</option>
+                  {matriculas.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.aluno?.nome} (Matrícula: {m.aluno.id})
+                    </option>
+                  ))}
+                </select>
 
-                {/* Campo ID Avaliação */}
-                <Input
-                  onChange={(e) => setAvaliacaoId(e.target.value)}
+                <select
+                  className="InputForm"
                   value={avaliacaoId}
-                  name="avaliacaoId"
-                  type="text"
+                  onChange={(e) => setAvaliacaoId(e.target.value)}
                   required
-                  placeholder="ID da Avaliação"
-                />
+                >
+                  <option value="">Selecione a Avaliação...</option>
+                  {atividades.map((atv) => (
+                    <option key={atv.id} value={atv.id}>
+                      {atv.nome} (Vale: {atv.nota})
+                    </option>
+                  ))}
+                </select>
 
-                {/* Campo Valor da Nota */}
-                <Input
-                  onChange={(e) => setValor(e.target.value)}
-                  value={valor}
-                  name="valor"
+                <input
+                  className="InputForm"
                   type="number"
-                  step="0.1"
+                  max={maxNota}
+                  step="0.01"
+                  min="0"
+                  placeholder={maxNota ? `Nota Obtida (Máx: ${maxNota})` : "Nota Obtida (Valor)"}
+                  value={valor}
+                  onChange={(e) => setValor(e.target.value)}
                   required
-                  placeholder="Nota (Valor)"
                 />
               </div>
 
