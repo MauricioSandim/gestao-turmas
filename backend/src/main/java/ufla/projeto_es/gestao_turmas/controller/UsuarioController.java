@@ -3,6 +3,7 @@ package ufla.projeto_es.gestao_turmas.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequestMapping("/api/v1/usuario")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Usuarios", description = "Endpoint para visualização de usuarios")
 public class UsuarioController {
 
     private final UsuarioMapper usuarioMapper;
@@ -36,6 +38,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Mostrar informações do usuário logado")
     public ResponseEntity<UsuarioResponseDTO> getMe(@AuthenticationPrincipal Usuario usuario){
         return ResponseEntity.ok(usuarioMapper.toResponse(usuario));
     }

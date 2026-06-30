@@ -49,7 +49,13 @@ Com essa solução, espera-se reduzir o tempo gasto com atividades administrativ
 
 # Instruções para Uso
 
-> **Preencher durante o desenvolvimento**
+1. Acesse a aplicação pelo endereço disponibilizado pela equipe responsável.
+2. Faça login utilizando suas credenciais.
+3. Caso ainda não possua uma conta, realize o cadastro pela tela inicial.
+4. Após a autenticação, utilize as funcionalidades disponíveis de acordo com seu perfil (Administrador, Professor ou Aluno).
+
+Em caso de problemas de acesso, entre em contato com o administrador do sistema.
+
 
 ---
 
@@ -198,9 +204,6 @@ feat: adicionar consulta por município
 **Conteúdo**
 
 ```text
-Regra de Negócio:
-<identificador ou Não se aplica>
-
 Tipo:
 feat | fix | refactor
 

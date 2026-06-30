@@ -90,6 +90,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(problemDetail);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ProblemDetail> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = buildProblemDetail("Argumentos ilegais", ex.getMessage(), request, HttpStatus.CONFLICT);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
+
     // Turmas
     @ExceptionHandler(TurmaComNomesIguaisException.class)
     public ResponseEntity<ProblemDetail> handleTurmaComNomesIguaisException(TurmaComNomesIguaisException ex, HttpServletRequest request) {
