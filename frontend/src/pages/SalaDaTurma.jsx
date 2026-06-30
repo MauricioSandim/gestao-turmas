@@ -10,6 +10,10 @@ function SalaDaTurmas() {
 
     const selecaoDaTurma = ondeEsta.pathname === `/turma/${nomeTurma}`;
 
+    const estaLogando = localStorage.getItem('token') === null; 
+
+
+
   return (
     <div className="LayoutTelaCompleta">
 
@@ -17,9 +21,13 @@ function SalaDaTurmas() {
 
         <div className="MenuLateralTopo">
 
+          <h1 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('usuario')) : ""}</h1>
+
+          <h4 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('role')) : "Login"}</h4>
+
           <Link to="/login" className="login-button btn-sidebar-login">
 
-            Login
+            {estaLogando === false ? "Entrar em Outra Conta" : "Login"}
 
           </Link>
 
@@ -37,11 +45,13 @@ function SalaDaTurmas() {
 
           <div className="TurmasTodo">
 
-            <h1 className="TituloTurmas">{`${nomeTurma}`}</h1>
+            <h1 className="TituloTurmas">Turma: {`${nomeTurma}`}</h1>
 
             {selecaoDaTurma ? (
 
                 <div className="Sala">
+
+                  <div className="ParteSala">
 
                     <Link to={`/turma/${nomeTurma}/notas`} className="aAcao">
 
@@ -49,29 +59,31 @@ function SalaDaTurmas() {
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/Atividades Avaliativas`} className="aAcao">
+                    <Link to={`/turma/${nomeTurma}/avaliacoes`} className="aAcao">
 
                     Atividades Avaliativas
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/Faltas`} className="aAcao">
+                    <Link to={`/turma/${nomeTurma}/faltas`} className="aAcao">
 
                     Faltas
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/Horários`} className="aAcao">
+                    <Link to={`/turma/${nomeTurma}/horarios`} className="aAcao">
 
                     Horários
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/Martrículas`} className="aAcao">
+                    <Link to={`/turma/${nomeTurma}/matriculas`} className="aAcao">
 
-                    Martrículas
+                    Matrículas
 
                     </Link>
+
+                  </div>
 
                 </div>
 
