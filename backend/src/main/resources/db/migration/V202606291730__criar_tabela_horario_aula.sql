@@ -6,9 +6,10 @@ CREATE TABLE horario_aula
     last_modified_at TIMESTAMP,
     deleted_at       TIMESTAMP,
 
-    hora      TIME        NOT NULL,
+    hora             TIME        NOT NULL,
     turma_id         BIGINT      NOT NULL,
     dia_semana       VARCHAR(25) NOT NULL,
+    position         INTEGER,
 
     CONSTRAINT chk_horario_aula_dia_semana
         CHECK (dia_semana IN (

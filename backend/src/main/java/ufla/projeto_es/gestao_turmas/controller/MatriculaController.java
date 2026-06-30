@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/turmas")
 @RequiredArgsConstructor
-@Tag(name = "Turmas", description = "Endpoint para CRUD de turmas")
+@Tag(name = "Matricula", description = "Endpoint para CRUD de turmas")
 public class MatriculaController {
 
     private final MatriculaService matriculaService;
@@ -28,10 +28,10 @@ public class MatriculaController {
 
     @GetMapping("/{turmaId}/matricula")
     @Operation(summary = "Consultar matriculas em uma turma")
-    public ResponseEntity<List<UsuarioResponseDTO>> consultar(@PathVariable(name = "turmaId") Long turmaId, @AuthenticationPrincipal Usuario usuario) {
-        List<Usuario> alunos = matriculaService.consultar(turmaId, usuario);
+    public ResponseEntity<List<MatriculaResponseDTO>> consultar(@PathVariable(name = "turmaId") Long turmaId, @AuthenticationPrincipal Usuario usuario) {
+        List<Matricula> alunos = matriculaService.consultar(turmaId, usuario);
 
-        return ResponseEntity.ok(alunos.stream().map(usuarioMapper::toResponse).toList());
+        return ResponseEntity.ok(alunos.stream().map(matriculaMapper::toResponse).toList());
     }
 
     @PostMapping("/{turmaId}/matricula")

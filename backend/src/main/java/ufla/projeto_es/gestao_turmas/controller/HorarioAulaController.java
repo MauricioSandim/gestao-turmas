@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/turmas")
-@Tag(name = "Turmas", description = "Endpoint para CRUD de turmas")
+@Tag(name = "Horario Aula", description = "Endpoint para CRUD de turmas")
 @RequiredArgsConstructor
 public class HorarioAulaController {
     private final HorarioAulaService horarioAulaService;

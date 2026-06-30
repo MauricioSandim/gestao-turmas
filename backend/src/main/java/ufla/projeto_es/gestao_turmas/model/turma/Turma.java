@@ -35,6 +35,7 @@ public class Turma extends OwnedEntity<Long> {
 
     // HORARIO AULA
     @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderColumn(name = "position")
     private List<HorarioAula> horariosAula;
 
     public void addHorarioAula(HorarioAula horarioAula) {
@@ -69,6 +70,7 @@ public class Turma extends OwnedEntity<Long> {
 
     // MATRICULA
     @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderColumn(name = "position")
     private List<Matricula> matriculas;
 
     public List<Usuario> getAlunos() {

@@ -6,6 +6,7 @@ CREATE TABLE matricula
     last_modified_at TIMESTAMP,
     aluno_id         BIGINT    NOT NULL,
     turma_id         BIGINT    NOT NULL,
+    position         INTEGER,
 
     CONSTRAINT fk_matricula_aluno FOREIGN KEY (aluno_id) REFERENCES usuario (id),
     CONSTRAINT fk_matricula_turma FOREIGN KEY (turma_id) REFERENCES turma (id),
