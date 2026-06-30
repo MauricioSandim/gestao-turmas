@@ -193,7 +193,7 @@ function Turmas() {
 
                           <a className="aAcao aExcluir" onClick={() => handleDelete(turma.id)}>Excluir</a>
 
-                          <Link to={`/turma/${turma.nome}`} className="aAcao"> 
+                          <Link to={`/turma/${turma.id}`} className="aAcao"> 
 
                           Entrar
 

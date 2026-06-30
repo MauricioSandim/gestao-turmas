@@ -5,10 +5,10 @@ import api from "../services/api";
 
 function SalaDaTurmas() {
 
-    const {nomeTurma} = useParams();
+    const {turmaId} = useParams();
     const ondeEsta = useLocation();
 
-    const selecaoDaTurma = ondeEsta.pathname === `/turma/${nomeTurma}`;
+    const selecaoDaTurma = ondeEsta.pathname === `/turma/${turmaId}`;
 
     const estaLogando = localStorage.getItem('token') === null; 
 
@@ -45,7 +45,7 @@ function SalaDaTurmas() {
 
           <div className="TurmasTodo">
 
-            <h1 className="TituloTurmas">Turma: {`${nomeTurma}`}</h1>
+            <h1 className="TituloTurmas">Turma</h1>
 
             {selecaoDaTurma ? (
 
@@ -53,31 +53,31 @@ function SalaDaTurmas() {
 
                   <div className="ParteSala">
 
-                    <Link to={`/turma/${nomeTurma}/notas`} className="aAcao">
+                    <Link to={`/turma/${turmaId}/notas`} className="aAcao">
 
                     Notas
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/avaliacoes`} className="aAcao">
+                    <Link to={`/turma/${turmaId}/avaliacoes`} className="aAcao">
 
                     Atividades Avaliativas
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/faltas`} className="aAcao">
+                    <Link to={`/turma/${turmaId}/faltas`} className="aAcao">
 
                     Faltas
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/horarios`} className="aAcao">
+                    <Link to={`/turma/${turmaId}/horarios`} className="aAcao">
 
                     Horários
 
                     </Link>
 
-                    <Link to={`/turma/${nomeTurma}/matriculas`} className="aAcao">
+                    <Link to={`/turma/${turmaId}/matriculas`} className="aAcao">
 
                     Matrículas
 

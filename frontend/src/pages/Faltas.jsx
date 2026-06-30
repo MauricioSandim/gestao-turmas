@@ -1,222 +1,173 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Input from "../components/Input";
+import api from "../services/api";
 
-function Faltas () {
+function Faltas() {
+  const { turmaId } = useParams();
 
-  const { nomeTurma } = useParams();
-
-  const [turmas, setTurmas] = useState([]); 
-  const [view, setView] = useState("list"); 
-  const [nome, setNome] = useState("");
+  const [faltas, setFaltas] = useState([]);
+  const [view, setView] = useState("list");
+  const [matriculaId, setMatriculaId] = useState("");
+  const [data, setData] = useState("");
   const [editingId, setEditingId] = useState(null);
 
-  // Executa automaticamente quando a tela abre
-  useEffect((e) => {
+  useEffect(() => {
+    fetchFaltas();
+  }, [turmaId]);
 
-    fetchNotas();
-    
-  }, []);
-
-  const fetchNotas = async () => {
+  const fetchFaltas = async () => {
     try {
-
-      const response = await api.get('/api/v1/turmas'); 
-
-      setTurmas(response.data);
-
+      const response = await api.get(`/api/v1/turmas/${turmaId}/faltas`);
+      setFaltas(response.data);
     } catch (error) {
-
-      console.error("Erro detalhado do backend:", error.response);
-
-      alert(`Erro ${error.response?.status}: Falha ao carregar turmas.`);
-
+      console.error(error);
+      alert("Falha ao carregar faltas.");
     }
-
   };
 
   const handleCreate = async (e) => {
-
     e.preventDefault();
-
-    if (!nome) return;
-
     try {
-
-      await api.post('/api/v1/turmas', { nome });
-
+      await api.post(`/api/v1/turmas/${turmaId}/faltas/${matriculaId}`, { data });
       resetForm();
-
-      fetchTurmas();
-
+      fetchFaltas();
     } catch (error) {
-
-      console.error("Erro ao criar turma", error);
-
+      console.error(error);
+      alert("Erro ao lançar falta.");
     }
-
   };
 
-  const handleEdit = (turma) => {
-
-    setEditingId(turma.id);
-
-    setNome(turma.nome);
-
+  const handleEdit = (falta) => {
+    setEditingId(falta.id);
+    setMatriculaId(falta.matriculaId || falta.alunoId || "");
+    setData(falta.data);
     setView("edit");
-
   };
 
   const handleUpdate = async (e) => {
-
     e.preventDefault();
-
     try {
-
-      await api.put(`/api/v1/turmas/${editingId}`, { nome });
-
+      await api.put(`/api/v1/turmas/${turmaId}/faltas/${matriculaId}/${editingId}`, { data });
       resetForm();
-
-      fetchTurmas();
-
+      fetchFaltas();
     } catch (error) {
-
-      console.error("Erro ao atualizar turma", error);
-
+      console.error(error);
+      alert("Erro ao atualizar falta.");
     }
-
   };
 
-  const handleDelete = async (id) => {
-
-    if(!window.confirm("Tem certeza que deseja excluir esta turma?")) return;
-    
+  const handleDelete = async (mId, id) => {
+    if (!window.confirm("Tem certeza que deseja excluir esta falta?")) return;
     try {
-      await api.delete(`/api/v1/turmas/${id}`);
-
-      fetchTurmas();
-
+      await api.delete(`/api/v1/turmas/${turmaId}/faltas/${mId}/${id}`);
+      fetchFaltas();
     } catch (error) {
-
-      console.error("Erro ao deletar turma", error);
-
+      console.error(error);
+      alert("Erro ao deletar falta.");
     }
   };
 
   const resetForm = () => {
-
-    setNome("");
-
+    setMatriculaId("");
+    setData("");
     setEditingId(null);
-
     setView("list");
-
   };
 
   return (
-
- <div className="Sala">
-
+    <div className="Sala">
       {view === "list" && (
-
         <>
+          <div className="ParteSala">
+            <h3>👥 Gerenciamento de Faltas</h3>
+            <Button className="aAcao" onClick={() => setView("create")}>
+              Cadastrar Nova Falta
+            </Button>
 
-            <div className="ParteSala">
-                <h3>👥 Gerenciamento de Faltas</h3>
-                <Button className="aAcao" onClick={() => setView("create")}>Cadastrar Novo Faltas</Button>
-
-                <table className="Tabela">
-                    <thead>
-                    <tr className="Info">
-                        <th className="Coluna">Aluno</th>
-                        <th className="Coluna">dia</th>
-                        <th className="LinhaAcao">Ações</th>
+            <table className="Tabela">
+              <thead>
+                <tr className="Info">
+                  <th className="Coluna">Aluno</th>
+                  <th className="Coluna">Dia</th>
+                  <th className="LinhaAcao">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {faltas.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" style={{ textAlign: "center", padding: "15px" }}>
+                      Nenhuma falta cadastrada para esta turma.
+                    </td>
+                  </tr>
+                ) : (
+                  faltas.map((f) => (
+                    <tr key={f.id}>
+                      <td className="LinhaDado">{f.matriculaId || f.alunoNome || f.alunoId}</td>
+                      <td className="LinhaDado">{f.data}</td>
+                      <td className="LinhaAcao">
+                        <button className="aAcao" onClick={() => handleEdit(f)} style={{ marginRight: "10px" }}>
+                          Editar
+                        </button>
+                        <button className="aAcao" onClick={() => handleDelete(f.matriculaId || f.alunoId, f.id)}>
+                          Excluir
+                        </button>
+                      </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td className="LinhaDado">20260001</td>
-                        <td className="LinhaDado">09</td>
-                        <td className="LinhaAcao">
-                        <a className="aAcao">Editar</a> <a className="aAcao">Excluir</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-          </>
-
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {(view === "create" || view === "edit") && (
-
         <>
-
-        <div className="TurmaTodo">
-
-          <h1 className="Titulo">
-
-            {view === "create" ? "Lançar Falta" : "Editar Falta"}
-
-          </h1>
+          <div className="TurmaTodo">
+            <h1 className="Titulo">
+              {view === "create" ? "Lançar Falta" : "Editar Falta"}
+            </h1>
 
             <form className="Formulario" onSubmit={view === "create" ? handleCreate : handleUpdate}>
-
               <div className="Input">
-                    
                 <input
                   className="InputForm"
                   type="text"
                   placeholder="Aluno"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  value={matriculaId}
+                  onChange={(e) => setMatriculaId(e.target.value)}
                   required
                   maxLength={30}
-              />
+                  disabled={view === "edit"}
+                />
 
                 <input
                   className="InputForm"
                   type="text"
                   placeholder="Data"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
+                  value={data}
+                  onChange={(e) => setData(e.target.value)}
                   required
                   maxLength={30}
-              />
-
+                />
               </div>
 
-                  <div className="ContinuaTodo">
-
-                    <button type="submit" className="login-button">
-
-                      Salvar
-
-                    </button>
-
-                    <button className="login-button" onClick={resetForm}>
-
-                      Cancelar
-
-                    </button>
-
-                  </div>
-
-                </form>
-
-                </div>
-
-              </>
-
-            )}
-
+              <div className="ContinuaTodo">
+                <button type="submit" className="login-button">
+                  Salvar
+                </button>
+                <button type="button" className="login-button" onClick={resetForm}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </>
+      )}
     </div>
-
   );
-
 }
 
-export default Faltas
+export default Faltas;

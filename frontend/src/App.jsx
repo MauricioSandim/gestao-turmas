@@ -32,7 +32,7 @@ function App() {
 
       <Routes>
 
-        <Route path='/turma/:nomeTurma' element={<SalaDaTurma/>}>
+        <Route path='/turma/:turmaId' element={<SalaDaTurma/>}>
 
           <Route path='notas' element={<Notas/>}/>
 
