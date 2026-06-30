@@ -14,8 +14,31 @@ function Turmas() {
   useEffect((e) => {
 
     fetchTurmas();
+
+    logando();
     
   }, []);
+
+  const logando = async () => {
+    try {
+
+      const response = await api.get('/api/v1/usuario/me');
+      const nomeUsuario = response.data.nome;
+
+      localStorage.setItem('usuario', JSON.stringify(nomeUsuario));
+
+      const quemUsuario = response.data.roleName;
+
+      localStorage.setItem('role', JSON.stringify(quemUsuario));
+
+    } catch (error) {
+
+      console.error("Erro ao buscar usuário", error);
+
+    }
+  }
+
+  const estaLogando = localStorage.getItem('token') === null; 
 
   const fetchTurmas = async () => {
     try {
@@ -119,9 +142,14 @@ function Turmas() {
 
         <div className="MenuLateralTopo">
 
+          <h1 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('usuario')) : ""}</h1>
+
+          <h4 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('role')) : "Login"}</h4>
+
+
           <Link to="/login" className="login-button btn-sidebar-login">
 
-            Login
+            {estaLogando === false ? "Entrar em Outra Conta" : "Login"}
 
           </Link>
 
@@ -137,7 +165,7 @@ function Turmas() {
 
         <main className="TelaConta">
 
-          <div className="TurmasTodo">
+          <div className="TurmasTodoTelaTurma">
 
             {view === "list" && (
 
@@ -155,7 +183,7 @@ function Turmas() {
 
                         <div className="InfoTurma">
 
-                          <p className="TxtNomeTurma">{turma.nome}</p>
+                          <p className="TxtNomeTurma">Turma: {turma.nome}</p>
 
                         </div>
 
