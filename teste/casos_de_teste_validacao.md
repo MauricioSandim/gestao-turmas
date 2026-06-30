@@ -1,0 +1,7 @@
+## Casos de teste
+
+| Caso de Teste | Funcionalidade | Cenário | Pré-Condições | Dados de Entrada | Resultado Esperado | Status | Local | Observações |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CTV-001 | Criar nova turma | Professor criando uma Turma | 1.Usuário autenticado no sistema com perfil de professor. 2.Usuário deve estar na tela de gerenciamento de turmas. | Nome da turma: `2° Ano A`. | O sistema deve cadastrar a turma, exibir a nova turma na listagem e apresentar mensagem de sucesso. | Aprovado | Tela de Turmas | Validar o fluxo principal de criação de turma. |
+| CTV-002 | Impedir criação de turma duplicada | Professor criando uma Turma com um nome que já existe | 1.Usuário autenticado como professor. 2.Já existe uma turma com o mesmo nome cadastrada para o usuário. | Nome da turma: `2° Ano A`. | O sistema deve impedir o cadastro e exibir mensagem informando que já existe uma turma com esse nome. | Aprovado | Tela de Cadastro de Turma | Validar fluxo alternativo com dados inválidos. |
+| CTV-003 | Validar tamanho mínimo da senha | Usuário coloca uma senha menor do que 8 caracteres | 1.Usuário acessando tela de cadastro. | Senha informada: `1234567` (menos de 8 caracteres). | O sistema deve rejeitar a senha e informar que ela precisa possuir no mínimo 8 caracteres. | Aprovado | Tela de Cadastro | Validar regra de segurança da senha. |
