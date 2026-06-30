@@ -61,66 +61,73 @@ Em caso de problemas de acesso, entre em contato com o administrador do sistema.
 
 # Instruções para Desenvolvedores
 
-### Backend
+☕ 1. Configuração do BackEnd (Spring Boot + Docker)
 
-1. Acesse a pasta do projeto:
+O backend utiliza Docker para orquestrar a API e o banco de dados de forma automatizada.
 
-```bash
-cd backend
-```
+Passo 1: Configurar as Variáveis de Ambiente
 
-2. Crie o arquivo de configuração:
-
-```bash
+Na pasta raiz do BackEnd, crie o arquivo .env a partir do modelo existente:
+```Bash
 cp env.example .env
 ```
 
-3. Ajuste as variáveis do `.env` conforme o ambiente.
+Abra o arquivo .env recém-criado e ajuste os valores conforme as necessidades do seu ambiente local. As principais variáveis são:
 
-4. Inicie a aplicação:
+    SERVER_PORT: Porta onde a API vai rodar (padrão: 8080).
 
-**Com Docker (recomendado):**
+    SPRING_DATASOURCE_HOST: Host do banco de dados.
 
-```bash
+    SPRING_DATASOURCE_PORT: Porta do banco de dados.
+
+    SPRING_DATASOURCE_DATABASE: Nome do banco de dados.
+
+    SPRING_DATASOURCE_USERNAME: Usuário do banco.
+
+    SPRING_DATASOURCE_PASSWORD: Senha do banco.
+
+    API_SECURITY_JWT_SECRET: Chave secreta para assinatura dos tokens JWT.
+
+    API_FRONTEND_URL: URL correspondente ao FrontEnd (ex: http://localhost:5173).
+
+Passo 2: Inicializar os Serviços via Docker
+
+Com o arquivo .env configurado, execute o comando abaixo para buildar e iniciar os containers em segundo plano (-d):
+```Bash
 docker compose up -d --build
 ```
 
-**Ou execute apenas o banco e rode a API pela IDE/Maven:**
+* Serviços e Acessos do BackEnd
 
-```bash
-docker compose up -d db
-```
+Após a inicialização do Docker, você poderá acessar:
 
-A API ficará disponível em:
+    API Principal: http://localhost:8080
 
-* API: `http://localhost:8080`
-* Swagger: `http://localhost:8080/swagger-ui.html`
+    Documentação (Swagger UI): http://localhost:8080/swagger-ui.html
 
----
+2. Configuração do FrontEnd (React + Vite)
 
-### Frontend
+O frontend é construído com React, utilizando Vite como bundler, além de React Router para rotas e Axios para consumo de APIs.
 
-1. Acesse a pasta do projeto:
+Passo 1: Instalar as Dependências
 
-```bash
-cd frontend
-```
-
-2. Instale as dependências:
-
-```bash
+Abra o terminal dentro da pasta raiz do FrontEnd e baixe todos os pacotes necessários listados no package.json:
+```Bash
 npm install
 ```
 
-3. Execute a aplicação:
+Passo 2: Executar em Modo de Desenvolvimento
 
-```bash
+Inicie o servidor local do Vite com o comando:
+```Bash
 npm run dev
 ```
 
-O frontend ficará disponível em `http://localhost:5173` (ou na porta indicada pelo Vite).
+* Serviços e Acessos do BackEnd
 
-> Certifique-se de que o backend esteja em execução para que a aplicação funcione corretamente.
+Após a inicialização o projeto, você poderá acessar:
+
+    localhost Principal: http://localhost:5173
 
 ---
 
