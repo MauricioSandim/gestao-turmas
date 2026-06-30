@@ -2,11 +2,10 @@ package ufla.projeto_es.gestao_turmas.service;
 
 import org.junit.jupiter.api.Assertions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,256 +31,220 @@ import ufla.projeto_es.gestao_turmas.repository.TurmaRepository;
 @ExtendWith(MockitoExtension.class)
 class TurmaServiceTest {
 
-    @Mock
-    private TurmaRepository turmaRepository;
+        @Mock
+        private TurmaRepository turmaRepository;
 
-    private TurmaMapper turmaMapper;
+        private TurmaMapper turmaMapper;
 
-    private TurmaService turmaService;
+        private TurmaService turmaService;
 
-    @BeforeEach
-    void setup() {
-        turmaMapper = Mappers.getMapper(TurmaMapper.class);
+        @BeforeEach
+        void setup() {
+                turmaMapper = Mappers.getMapper(TurmaMapper.class);
 
-        turmaService = new TurmaService(turmaRepository, turmaMapper);
-    }
+                turmaService = new TurmaService(turmaRepository, turmaMapper);
+        }
 
-    @Test
-    void deveCriarTurmaComSucesso() {
+        @Test
+        void deveCriarTurmaComSucesso() {
 
-        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
+                CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
-        usuario.setRole(role);
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                Role role = new Role();
+                role.setNome(RoleEnum.PROFESSOR);
+                usuario.setRole(role);
 
-        when(
-                turmaRepository.existsByNomeAndUsuario_Id(
-                        "2°Ano A",
-                        1L))
-                .thenReturn(false);
+                when(
+                                turmaRepository.existsByNomeAndUsuario_Id(
+                                                "2°Ano A",
+                                                1L))
+                                .thenReturn(false);
 
-        when(turmaRepository.save(any()))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+                when(turmaRepository.save(any()))
+                                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        Turma turmaCriada = turmaService.criar(dto, usuario);
+                Turma turmaCriada = turmaService.criar(dto, usuario);
 
-        Assertions.assertNotNull(turmaCriada);
+                Assertions.assertNotNull(turmaCriada);
 
-        Assertions.assertEquals(
-                "2°Ano A",
-                turmaCriada.getNome());
+                Assertions.assertEquals(
+                                "2°Ano A",
+                                turmaCriada.getNome());
 
-        Assertions.assertEquals(
-                usuario,
-                turmaCriada.getUsuario());
+                Assertions.assertEquals(
+                                usuario,
+                                turmaCriada.getUsuario());
 
-        verify(turmaRepository, times(1)).save(any(Turma.class));
-    }
+                verify(turmaRepository, times(1)).save(any(Turma.class));
+        }
 
-    @Test
-    void naoDeveCriarTurmaSeUsuarioNaoForProfessor() {
+        @Test
+        void naoDeveCriarTurmaSeUsuarioNaoForProfessor() {
 
-        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
+                CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO("2°Ano A");
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        Role role = new Role();
-        role.setNome(RoleEnum.ALUNO);
-        usuario.setRole(role);
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                Role role = new Role();
+                role.setNome(RoleEnum.ALUNO);
+                usuario.setRole(role);
 
-        AccessDeniedException thrown = Assertions.assertThrows(
-                AccessDeniedException.class,
-                () -> turmaService.criar(dto, usuario));
+                AccessDeniedException thrown = Assertions.assertThrows(
+                                AccessDeniedException.class,
+                                () -> turmaService.criar(dto, usuario));
 
-        Assertions.assertEquals("Acesso negado", thrown.getMessage());
+                Assertions.assertEquals("Acesso negado", thrown.getMessage());
 
-        verify(turmaRepository, never()).save(any());
-    }
+                verify(turmaRepository, never()).save(any());
+        }
 
-    @Test
-    void naoDeveCriarTurmaComNomeExistente() {
+        @Test
+        void naoDeveCriarTurmaComNomeExistente() {
 
-        String nome = "2°Ano A";
+                String nome = "2°Ano A";
 
-        CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO(nome);
+                CreateTurmaRequestDTO dto = new CreateTurmaRequestDTO(nome);
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
-        usuario.setRole(role);
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                Role role = new Role();
+                role.setNome(RoleEnum.PROFESSOR);
+                usuario.setRole(role);
 
-        when(turmaRepository.existsByNomeAndUsuario_Id(nome, 1L))
-                .thenReturn(true);
+                when(turmaRepository.existsByNomeAndUsuario_Id(nome, 1L))
+                                .thenReturn(true);
 
-        TurmaComNomesIguaisException thrown = Assertions.assertThrows(
-                TurmaComNomesIguaisException.class, () -> {
-                    turmaService.criar(dto, usuario);
-                });
+                TurmaComNomesIguaisException thrown = Assertions.assertThrows(
+                                TurmaComNomesIguaisException.class, () -> {
+                                        turmaService.criar(dto, usuario);
+                                });
 
-        Assertions.assertEquals("Já existe uma turma com nome: " + nome, thrown.getMessage());
+                Assertions.assertEquals("Já existe uma turma com nome: " + nome, thrown.getMessage());
 
-        verify(turmaRepository, never()).save(any());
-    }
+                verify(turmaRepository, never()).save(any());
+        }
 
-    @Test
-    void deveAtualizarTurmaComSucesso() {
+        @Test
+        void naoDeveAtualizarTurmaInexistente() {
 
-        UpdateTurmaRequestDTO dto = new UpdateTurmaRequestDTO("3°Ano A");
+                UpdateTurmaRequestDTO dto = new UpdateTurmaRequestDTO("3°Ano A");
 
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
+                Role role = new Role();
+                role.setNome(RoleEnum.PROFESSOR);
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setRole(role);
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                usuario.setRole(role);
 
-        long id = 10L;
+                long id = 10L;
 
-        Turma turmaExistente = new Turma();
-        turmaExistente.setId(id);
-        turmaExistente.setNome("2°Ano A");
-        turmaExistente.setUsuario(usuario);
+                when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
+                                .thenReturn(Optional.empty());
 
-        when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
-                .thenReturn(Optional.of(turmaExistente));
+                NotFoundException thrown = Assertions.assertThrows(NotFoundException.class,
+                                () -> turmaService.atualizar(
+                                                id,
+                                                dto,
+                                                usuario));
 
-        when(turmaRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+                Assertions.assertEquals("Turma não encontrada para id: " + id, thrown.getMessage());
 
-        Turma resultado = turmaService.atualizar(id, dto, usuario);
+                verify(turmaRepository, never()).save(any());
+        }
 
-        assertNotNull(resultado);
+        @Test
+        void naoDeveAtualizarTurmaSeUsuarioNaoForProfessor() {
 
-        assertEquals("3°Ano A", resultado.getNome());
+                UpdateTurmaRequestDTO dto = new UpdateTurmaRequestDTO("3°Ano A");
 
-        assertEquals(usuario, resultado.getUsuario());
+                Role role = new Role();
+                role.setNome(RoleEnum.ALUNO);
 
-        verify(turmaRepository, times(1)).findByIdAndUsuario_Id(id, 1L);
+                long id = 1L;
 
-        verify(turmaRepository, times(1)).save(turmaExistente);
-    }
+                Usuario usuario = new Usuario();
+                usuario.setId(id);
+                usuario.setRole(role);
 
-    @Test
-    void naoDeveAtualizarTurmaInexistente() {
+                AccessDeniedException thrown = Assertions.assertThrows(
+                                AccessDeniedException.class,
+                                () -> turmaService.atualizar(id, dto, usuario));
 
-        UpdateTurmaRequestDTO dto = new UpdateTurmaRequestDTO("3°Ano A");
+                Assertions.assertEquals("Acesso negado", thrown.getMessage());
 
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
+                verify(turmaRepository, never()).save(any());
+        }
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setRole(role);
+        @Test
+        void deveDeletarTurmaComSucesso() {
 
-        long id = 10L;
+                Role role = new Role();
+                role.setNome(RoleEnum.PROFESSOR);
 
-        when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
-                .thenReturn(Optional.empty());
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                usuario.setRole(role);
 
-        NotFoundException thrown = Assertions.assertThrows(NotFoundException.class,
-                () -> turmaService.atualizar(
-                        id,
-                        dto,
-                        usuario));
+                long id = 10L;
 
-        Assertions.assertEquals("Turma não encontrada para id: " + id, thrown.getMessage());
+                Turma turma = new Turma();
+                turma.setId(id);
+                turma.setUsuario(usuario);
+                turma.setMatriculas(List.of());
 
-        verify(turmaRepository, never()).save(any());
-    }
+                when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
+                                .thenReturn(Optional.of(turma));
 
-    @Test
-    void naoDeveAtualizarTurmaSeUsuarioNaoForProfessor() {
+                turmaService.delete(id, usuario);
 
-        UpdateTurmaRequestDTO dto = new UpdateTurmaRequestDTO("3°Ano A");
+                verify(turmaRepository, times(1)).findByIdAndUsuario_Id(id, 1L);
 
-        Role role = new Role();
-        role.setNome(RoleEnum.ALUNO);
+                verify(turmaRepository, times(1)).delete(turma);
+        }
 
-        long id = 1L;
+        @Test
+        void naoDeveDeletarTurmaInexistente() {
 
-        Usuario usuario = new Usuario();
-        usuario.setId(id);
-        usuario.setRole(role);
+                Role role = new Role();
+                role.setNome(RoleEnum.PROFESSOR);
 
-        AccessDeniedException thrown = Assertions.assertThrows(
-                AccessDeniedException.class,
-                () -> turmaService.atualizar(id, dto, usuario));
+                Usuario usuario = new Usuario();
+                usuario.setId(1L);
+                usuario.setRole(role);
 
-        Assertions.assertEquals("Acesso negado", thrown.getMessage());
+                long id = 10L;
 
-        verify(turmaRepository, never()).save(any());
-    }
+                when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
+                                .thenReturn(Optional.empty());
 
-    @Test
-    void deveDeletarTurmaComSucesso() {
+                NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> turmaService.delete(
+                                id, usuario));
 
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
+                Assertions.assertEquals("Turma não encontrada para id: " + id, thrown.getMessage());
 
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setRole(role);
+                verify(turmaRepository, never()).delete(any());
+        }
 
-        long id = 10L;
+        @Test
+        void naoDeveDeletarTurmaSeUsuarioNaoForProfessor() {
 
-        Turma turma = new Turma();
-        turma.setId(id);
-        turma.setUsuario(usuario);
+                Role role = new Role();
+                role.setNome(RoleEnum.ALUNO);
 
-        when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
-                .thenReturn(Optional.of(turma));
+                long id = 1L;
 
-        turmaService.delete(id, usuario);
+                Usuario usuario = new Usuario();
+                usuario.setId(id);
+                usuario.setRole(role);
 
-        verify(turmaRepository, times(1)).findByIdAndUsuario_Id(id, 1L);
+                AccessDeniedException thrown = Assertions.assertThrows(
+                                AccessDeniedException.class,
+                                () -> turmaService.delete(id, usuario));
 
-        verify(turmaRepository, times(1)).delete(turma);
-    }
+                Assertions.assertEquals("Acesso negado", thrown.getMessage());
 
-    @Test
-    void naoDeveDeletarTurmaInexistente() {
-
-        Role role = new Role();
-        role.setNome(RoleEnum.PROFESSOR);
-
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setRole(role);
-
-        long id = 10L;
-
-        when(turmaRepository.findByIdAndUsuario_Id(id, 1L))
-                .thenReturn(Optional.empty());
-
-        NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> turmaService.delete(
-                id, usuario));
-
-        Assertions.assertEquals("Turma não encontrada para id: " + id, thrown.getMessage());
-
-        verify(turmaRepository, never()).delete(any());
-    }
-
-    @Test
-    void naoDeveDeletarTurmaSeUsuarioNaoForProfessor() {
-
-        Role role = new Role();
-        role.setNome(RoleEnum.ALUNO);
-
-        long id = 1L;
-
-        Usuario usuario = new Usuario();
-        usuario.setId(id);
-        usuario.setRole(role);
-
-        AccessDeniedException thrown = Assertions.assertThrows(
-                AccessDeniedException.class,
-                () -> turmaService.delete(id, usuario));
-
-        Assertions.assertEquals("Acesso negado", thrown.getMessage());
-
-        verify(turmaRepository, never()).save(any());
-    }
+                verify(turmaRepository, never()).save(any());
+        }
 }
