@@ -94,6 +94,13 @@
   gap: 2vh;
 }
 
+.FormularioSelecao {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
 .Crud {
   display: grid;
   justify-content: center;
