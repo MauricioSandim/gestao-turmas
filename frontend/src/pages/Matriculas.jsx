@@ -1,21 +1,19 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { useState, useEffect } from "react";
-import Input from "../components/Input";
 import api from "../services/api";
 
 function Matriculas() {
   const { turmaId } = useParams(); 
 
-
   const [matriculas, setMatriculas] = useState([]); 
+  const [alunos, setAlunos] = useState([]); 
   const [view, setView] = useState("list"); 
   const [alunoId, setAlunoId] = useState("");
 
   useEffect(() => {
-
     fetchMatriculas();
-
+    fetchAlunos();
   }, [turmaId]);
 
   const fetchMatriculas = async () => {
@@ -24,23 +22,36 @@ function Matriculas() {
       setMatriculas(response.data);
     } catch (error) {
       console.error("Erro detalhado do backend:", error.response);
-      alert(`Erro ${error.response?.status}: Falha ao carregar matrículas.`);
+      alert("Falha ao carregar matrículas.");
     }
   };
 
+  const fetchAlunos = async () => {
+    try {
+      const response = await api.get("/api/v1/aluno");
+      setAlunos(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar lista de alunos:", error);
+    }
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    if (!alunoId) return;
+    if (!alunoId) {
+      alert("Por favor, selecione um aluno.");
+      return;
+    }
 
     try {
-      await api.post(`/api/v1/turmas/${turmaId}/matricula`, { alunoId });
+    
+      await api.post(`/api/v1/turmas/${turmaId}/matricula?alunoId=${alunoId}`);
+
       alert("Matrícula realizada com sucesso!");
       resetForm();
       fetchMatriculas();
     } catch (error) {
-      console.error("Erro ao matricular aluno", error);
-      alert("Erro ao realizar matrícula.");
+      console.error("Erro ao matricular aluno:", error.response);
+      alert("Erro ao realizar matrícula. Verifique o console do backend.");
     }
   };
 
@@ -48,11 +59,12 @@ function Matriculas() {
     if (!window.confirm("Tem certeza que deseja remover esta matrícula?")) return;
     
     try {
-      await api.delete(`/api/v1/turmas/${turmaId}/matricula/${id}`);
+      await api.delete(`/api/v1/turmas/${turmaId}/matricula?alunoId=${id}`);
+
       alert("Matrícula removida com sucesso!");
       fetchMatriculas();
     } catch (error) {
-      console.error("Erro ao deletar matrícula", error);
+      console.error("Erro ao deletar matrícula:", error.response);
       alert("Erro ao remover matrícula.");
     }
   };
@@ -89,10 +101,12 @@ function Matriculas() {
                 ) : (
                   matriculas.map((m) => (
                     <tr key={m.id}>
-                      
-                      <td className="LinhaDado">{m.alunoId || m.id}</td>
+                 
+                      <td className="LinhaDado">
+                        {m.aluno ? `${m.aluno.nome} (Matrícula: ${m.aluno.id})` : `Matrícula ID: ${m.id}`}
+                      </td>
                       <td className="LinhaAcao">
-                        
+                      
                         <button className="aAcao" onClick={() => handleDelete(m.id)}>
                           Excluir
                         </button>
@@ -109,19 +123,23 @@ function Matriculas() {
       {view === "create" && (
         <>
           <div className="TurmaTodo">
-            <h1 className="Titulo">Matricular</h1>
+            <h1 className="Titulo">Matricular Aluno</h1>
 
             <form className="Formulario" onSubmit={handleCreate}>
               <div className="Input">
-                <input
+                <select
                   className="InputForm"
-                  type="text"
-                  placeholder="Número de Matrícula"
                   value={alunoId}
                   onChange={(e) => setAlunoId(e.target.value)}
                   required
-                  maxLength={30}
-                />
+                >
+                  <option value="">Selecione um Aluno...</option>
+                  {alunos.map((aluno) => (
+                    <option key={aluno.id} value={aluno.id}>
+                      {aluno.nome} (ID: {aluno.id})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="ContinuaTodo">
