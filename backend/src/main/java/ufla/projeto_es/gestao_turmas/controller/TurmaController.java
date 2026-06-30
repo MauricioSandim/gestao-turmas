@@ -2,6 +2,7 @@ package ufla.projeto_es.gestao_turmas.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,7 +45,7 @@ public class TurmaController {
 
     @PostMapping
     @Operation(summary = "Criar turma para um professor")
-    public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody CreateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<TurmaResponseDTO> criarTurma(@RequestBody @Valid CreateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         Turma turma = turmaService.criar(requestDTO, usuario);
 
         return ResponseEntity.ok(turmaMapper.toResponse(turma));
@@ -52,7 +53,7 @@ public class TurmaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Modificar turma para um professor")
-    public ResponseEntity<TurmaResponseDTO> atualizarTurma(@PathVariable Long id, @RequestBody UpdateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<TurmaResponseDTO> atualizarTurma(@PathVariable Long id, @RequestBody @Valid UpdateTurmaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         Turma turma = turmaService.atualizar(id, requestDTO, usuario);
 
         return ResponseEntity.ok(turmaMapper.toResponse(turma));

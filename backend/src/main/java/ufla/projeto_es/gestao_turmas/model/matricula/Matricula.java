@@ -6,14 +6,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.aspectj.weaver.ast.Not;
 import ufla.projeto_es.gestao_turmas.exception.NotFoundException;
+import ufla.projeto_es.gestao_turmas.model.atividadeAvalitiva.AtividadeAvaliativa;
 import ufla.projeto_es.gestao_turmas.model.baseEntity.BaseEntity;
 import ufla.projeto_es.gestao_turmas.model.falta.Falta;
 import ufla.projeto_es.gestao_turmas.model.falta.request.UpdateFaltaRequestDTO;
 import ufla.projeto_es.gestao_turmas.model.horarioAula.HorarioAula;
+import ufla.projeto_es.gestao_turmas.model.nota.Nota;
 import ufla.projeto_es.gestao_turmas.model.turma.Turma;
 import ufla.projeto_es.gestao_turmas.model.usuario.Usuario;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +39,7 @@ public class Matricula extends BaseEntity<Long> {
     @JoinColumn(name = "turma_id", nullable = false)
     private Turma turma;
 
+    // FALTAS
     @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "position")
     private final List<Falta> faltas = new ArrayList<>();
@@ -64,5 +69,43 @@ public class Matricula extends BaseEntity<Long> {
         faltaAtual.setData(falta.data());
 
         return faltaAtual;
+    }
+
+    // NOTAS
+    @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
+    private final List<Nota> notas = new ArrayList<>();
+
+    public void addNota(AtividadeAvaliativa atividadeAvaliativa, BigDecimal valor) {
+        notas.forEach((e) -> {
+            if (Objects.equals(e.getAtividadeAvaliativa().getId(), atividadeAvaliativa.getId()))
+                throw new IllegalArgumentException("Nota já cadastrada para matriculda de id " + this.getId() + ", para atividade de id " + atividadeAvaliativa.getId());
+        });
+
+        if (valor.compareTo(BigDecimal.ZERO) < 0 || valor.compareTo(atividadeAvaliativa.getNota()) > 0)
+            throw new IllegalArgumentException("O valor da nota  deve ser maior ou igual a zero e menor ou igual ao valor máximo");
+
+        Nota nota =  new Nota();
+
+        nota.setValor(valor);
+        nota.setAtividadeAvaliativa(atividadeAvaliativa);
+        nota.setMatricula(this);
+
+        notas.add(nota);
+    }
+
+    public void removeNota(Long id) {
+        if (!notas.removeIf((e) -> Objects.equals(e.getId(), id))) {
+            throw new NotFoundException("Nota com id " + id + " não existente");
+        }
+    }
+
+    public void updateNota(Long id, BigDecimal valor) {
+        Nota notaAtual = notas.stream().filter((e) -> Objects.equals(e.getId(), id)).findFirst().orElseThrow(() -> new NotFoundException("Nota com id " + id + " não existente"));
+
+        if (valor.compareTo(BigDecimal.ZERO) < 0 || valor.compareTo(notaAtual.getAtividadeAvaliativa().getNota()) > 0)
+            throw new IllegalArgumentException("O valor da nota  deve ser maior ou igual a zero e menor ou igual ao valor máximo");
+
+        notaAtual.setValor(valor);
     }
 }

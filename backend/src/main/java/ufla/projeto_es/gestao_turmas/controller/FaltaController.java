@@ -2,6 +2,7 @@ package ufla.projeto_es.gestao_turmas.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class FaltaController {
 
     @PostMapping("/{turmaId}/faltas/{matriculaId}")
     @Operation(summary = "Criar faltas por matrícula")
-    public ResponseEntity<FaltaResponseDTO> cadastrar(@PathVariable Long turmaId, @PathVariable Long matriculaId, @RequestBody CreateFaltaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<FaltaResponseDTO> cadastrar(@PathVariable Long turmaId, @PathVariable Long matriculaId, @RequestBody @Valid CreateFaltaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         faltaService.criar(turmaId, matriculaId, requestDTO, usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -41,7 +42,7 @@ public class FaltaController {
 
     @PutMapping("/{turmaId}/faltas/{matriculaId}/{id}")
     @Operation(summary = "Atualizar faltas por matrícula")
-    public ResponseEntity<FaltaResponseDTO> atualizar(@PathVariable Long turmaId, @PathVariable Long matriculaId, @PathVariable Long id, @RequestBody UpdateFaltaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
+    public ResponseEntity<FaltaResponseDTO> atualizar(@PathVariable Long turmaId, @PathVariable Long matriculaId, @PathVariable Long id, @RequestBody @Valid UpdateFaltaRequestDTO requestDTO, @AuthenticationPrincipal Usuario usuario) {
         faltaService.update(turmaId, matriculaId, id, requestDTO, usuario);
 
         return ResponseEntity.noContent().build();
