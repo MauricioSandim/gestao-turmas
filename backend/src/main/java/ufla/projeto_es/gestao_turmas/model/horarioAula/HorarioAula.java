@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import ufla.projeto_es.gestao_turmas.model.baseEntity.BaseEntity;
+import ufla.projeto_es.gestao_turmas.model.falta.Falta;
 import ufla.projeto_es.gestao_turmas.model.turma.Turma;
 import ufla.projeto_es.gestao_turmas.model.type.DiasEnum;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "horario_aula")
-public class HorarioAula extends BaseEntity <Long>{
+public class HorarioAula extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "turma_id", nullable = false)
@@ -31,4 +33,7 @@ public class HorarioAula extends BaseEntity <Long>{
 
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
+
+    @OneToMany(mappedBy = "horarioAula")
+    private List<Falta> falta;
 }
