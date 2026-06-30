@@ -25,8 +25,8 @@ public class MatriculaService {
     private final TurmaMapper turmaMapper;
 
     @Transactional(readOnly = true)
-    public List<Usuario> consultar(Long turmaId, Usuario usuario) {
-        return turmaRepository.findByIdAndUsuario_Id(turmaId, usuario.getId()).orElseThrow(() -> new NotFoundException("Turma não encontrada para id: " + turmaId)).getAlunos();
+    public List<Matricula> consultar(Long turmaId, Usuario usuario) {
+        return turmaRepository.findByIdAndUsuario_Id(turmaId, usuario.getId()).orElseThrow(() -> new NotFoundException("Turma não encontrada para id: " + turmaId)).getMatriculas();
     }
 
     @Transactional

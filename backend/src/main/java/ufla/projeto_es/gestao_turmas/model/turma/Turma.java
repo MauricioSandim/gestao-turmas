@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import ufla.projeto_es.gestao_turmas.exception.NotFoundException;
 import ufla.projeto_es.gestao_turmas.model.baseEntity.OwnedEntity;
+import ufla.projeto_es.gestao_turmas.model.horarioAula.HorarioAula;
 import ufla.projeto_es.gestao_turmas.model.matricula.Matricula;
 import ufla.projeto_es.gestao_turmas.model.type.RoleEnum;
 import ufla.projeto_es.gestao_turmas.model.usuario.Usuario;
@@ -31,7 +32,45 @@ public class Turma extends OwnedEntity<Long> {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "turma",orphanRemoval = true, cascade = CascadeType.ALL)
+
+    // HORARIO AULA
+    @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderColumn(name = "position")
+    private List<HorarioAula> horariosAula;
+
+    public void addHorarioAula(HorarioAula horarioAula) {
+        horariosAula.forEach((e) -> {
+            if (e.getHora().equals(horarioAula.getHora()) && e.getDiaSemana() == horarioAula.getDiaSemana())
+                throw new IllegalArgumentException("Horario aula já cadastrado para turma de id:" + this.getId());
+        });
+
+        horarioAula.setTurma(this);
+
+        horariosAula.add(horarioAula);
+    }
+
+    public void removeHorarioAula(Long id) {
+        if (!horariosAula.removeIf((e) -> Objects.equals(e.getId(), id))) {
+            throw new NotFoundException("Horario aula com id: " + id + " não existente na turma com id: " + this.getId());
+        }
+    }
+
+    public void updateHorarioAula(Long id, HorarioAula horarioAula) {
+        horariosAula.forEach((e) -> {
+            if (e.getHora().equals(horarioAula.getHora()) && e.getDiaSemana() == horarioAula.getDiaSemana())
+                throw new IllegalArgumentException("Horario aula já cadastrado para turma de id:" + this.getId());
+        });
+
+        HorarioAula horarioAulaAtual = horariosAula.stream().filter((e) -> Objects.equals(e.getId(), id)).findFirst().orElseThrow(() -> new NotFoundException("Horario aula com id: " + id + " não existente na turma com id: " + this.getId()));
+
+        horarioAulaAtual.setHora(horarioAula.getHora());
+        horarioAulaAtual.setDiaSemana(horarioAula.getDiaSemana());
+    }
+
+
+    // MATRICULA
+    @OneToMany(mappedBy = "turma", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OrderColumn(name = "position")
     private List<Matricula> matriculas;
 
     public List<Usuario> getAlunos() {
