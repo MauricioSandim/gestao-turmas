@@ -15,7 +15,8 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
 
                 String[] allowedOrigins = {
-                        "http://localhost:4200"
+                        "http://localhost:4200",
+                        "http://localhost:5173"
                 };
 
                 registry
