@@ -49,13 +49,78 @@ Com essa solução, espera-se reduzir o tempo gasto com atividades administrativ
 
 # Instruções para Uso
 
-> **Preencher durante o desenvolvimento**
+1. Acesse a aplicação pelo endereço disponibilizado pela equipe responsável.
+2. Faça login utilizando suas credenciais.
+3. Caso ainda não possua uma conta, realize o cadastro pela tela inicial.
+4. Após a autenticação, utilize as funcionalidades disponíveis de acordo com seu perfil (Administrador, Professor ou Aluno).
+
+Em caso de problemas de acesso, entre em contato com o administrador do sistema.
+
 
 ---
 
 # Instruções para Desenvolvedores
 
-> **Preencher durante o desenvolvimento**
+### Backend
+
+1. Acesse a pasta do projeto:
+
+```bash
+cd backend
+```
+
+2. Crie o arquivo de configuração:
+
+```bash
+cp env.example .env
+```
+
+3. Ajuste as variáveis do `.env` conforme o ambiente.
+
+4. Inicie a aplicação:
+
+**Com Docker (recomendado):**
+
+```bash
+docker compose up -d --build
+```
+
+**Ou execute apenas o banco e rode a API pela IDE/Maven:**
+
+```bash
+docker compose up -d db
+```
+
+A API ficará disponível em:
+
+* API: `http://localhost:8080`
+* Swagger: `http://localhost:8080/swagger-ui.html`
+
+---
+
+### Frontend
+
+1. Acesse a pasta do projeto:
+
+```bash
+cd frontend
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+```
+
+3. Execute a aplicação:
+
+```bash
+npm run dev
+```
+
+O frontend ficará disponível em `http://localhost:5173` (ou na porta indicada pelo Vite).
+
+> Certifique-se de que o backend esteja em execução para que a aplicação funcione corretamente.
 
 ---
 
@@ -132,9 +197,6 @@ feat: adicionar consulta por município
 **Conteúdo**
 
 ```text
-Regra de Negócio:
-<identificador ou Não se aplica>
-
 Tipo:
 feat | fix | refactor
 
