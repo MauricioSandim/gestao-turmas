@@ -4,239 +4,175 @@ import "../Styles/Styles.css";
 import api from "../services/api";
 
 function Turmas() {
-
   const [turmas, setTurmas] = useState([]); 
   const [view, setView] = useState("list"); 
   const [nome, setNome] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [role, setRole] = useState("");
 
-  // Executa automaticamente quando a tela abre
-  useEffect((e) => {
-
-    fetchTurmas();
-
-    logando();
-    
+  useEffect(() => {
+    const inicializar = async () => {
+      await logando();
+      await fetchTurmas();
+    };
+    inicializar();
   }, []);
 
   const logando = async () => {
     try {
-
       const response = await api.get('/api/v1/usuario/me');
       const nomeUsuario = response.data.nome;
-
       localStorage.setItem('usuario', JSON.stringify(nomeUsuario));
-
       const quemUsuario = response.data.roleName;
-
       localStorage.setItem('role', JSON.stringify(quemUsuario));
-
+      setRole(quemUsuario);
+      return quemUsuario;
     } catch (error) {
-
       console.error("Erro ao buscar usuário", error);
-
+      const localRole = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : "";
+      setRole(localRole);
+      return localRole;
     }
-  }
+  };
 
   const estaLogando = localStorage.getItem('token') === null; 
 
   const fetchTurmas = async () => {
     try {
+      const responseUsuario = await api.get('/api/v1/usuario/me');
+      const atualRole = responseUsuario.data.roleName;
 
-      const response = await api.get('/api/v1/turmas'); 
-
-      setTurmas(response.data);
-
+      if (atualRole === "ALUNO") {
+        const response = await api.get('/api/v1/area-aluno');
+        const dataMapeada = response.data.map(m => ({
+          id: m.turma?.id,
+          nome: m.turma?.nome,
+          matriculaId: m.id
+        }));
+        setTurmas(dataMapeada);
+      } else {
+        const response = await api.get('/api/v1/turmas'); 
+        setTurmas(response.data);
+      }
     } catch (error) {
-
       console.error("Erro detalhado do backend:", error.response);
-
       alert(`Erro ${error.response?.status}: Falha ao carregar turmas.`);
-
     }
-
   };
 
   const handleCreate = async (e) => {
-
     e.preventDefault();
-
     if (!nome) return;
-
     try {
-
       await api.post('/api/v1/turmas', { nome });
-
       resetForm();
-
       fetchTurmas();
-
     } catch (error) {
-
       console.error("Erro ao criar turma", error);
-
     }
-
   };
 
   const handleEdit = (turma) => {
-
     setEditingId(turma.id);
-
     setNome(turma.nome);
-
     setView("edit");
-
   };
 
   const handleUpdate = async (e) => {
-
     e.preventDefault();
-
     try {
-
       await api.put(`/api/v1/turmas/${editingId}`, { nome });
-
       resetForm();
-
       fetchTurmas();
-
     } catch (error) {
-
       console.error("Erro ao atualizar turma", error);
-
     }
-
   };
 
   const handleDelete = async (id) => {
-
     if(!window.confirm("Tem certeza que deseja excluir esta turma?")) return;
-    
     try {
       await api.delete(`/api/v1/turmas/${id}`);
-
       fetchTurmas();
-
     } catch (error) {
-
       console.error("Erro ao deletar turma", error);
+    }
+  };
 
+  const handleEntrarTurma = (turma) => {
+    if (turma.matriculaId) {
+      localStorage.setItem(`matricula_turma_${turma.id}`, JSON.stringify(turma.matriculaId));
     }
   };
 
   const resetForm = () => {
-
     setNome("");
-
     setEditingId(null);
-
     setView("list");
-
   };
 
   return (
     <div className="LayoutTelaCompleta">
-
       <aside className="MenuLateralEsquerdo">
-
         <div className="MenuLateralTopo">
-
           <h1 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('usuario')) : ""}</h1>
-
           <h4 className="TituloTurmas">{estaLogando === false ? JSON.parse(localStorage.getItem('role')) : "Login"}</h4>
-
-
           <Link to="/login" className="login-button btn-sidebar-login">
-
             {estaLogando === false ? "Entrar em Outra Conta" : "Login"}
-
           </Link>
-
         </div>
-
-        <div className="MenuLateralEspacoBotoes">
-
-        </div>
-
+        <div className="MenuLateralEspacoBotoes"></div>
       </aside>
 
       <div className="BOX">
-
         <main className="TelaConta">
-
           <div className="TurmasTodoTelaTurma">
-
             {view === "list" && (
-
               <>
-
                 <h1 className="TituloTurmas">Turmas</h1>
-                
                 <div className="Crud">
-
                   <div className="ListaContainer">
-
                     {turmas.map((turma) => (
-
                       <div key={turma.id} className="ItemTurma">
-
                         <div className="InfoTurma">
-
                           <p className="TxtNomeTurma">Turma: {turma.nome}</p>
-
                         </div>
-
                         <div className="AcoesTurma">
-
-                          <a className="aAcao" onClick={() => handleEdit(turma)}>Editar</a>
-
-                          <a className="aAcao aExcluir" onClick={() => handleDelete(turma.id)}>Excluir</a>
-
-                          <Link to={`/turma/${turma.id}`} className="aAcao"> 
-
-                          Entrar
-
+                          {role !== "ALUNO" && (
+                            <>
+                              <a className="aAcao" onClick={() => handleEdit(turma)}>Editar</a>
+                              <a className="aAcao aExcluir" onClick={() => handleDelete(turma.id)}>Excluir</a>
+                            </>
+                          )}
+                          <Link 
+                            to={`/turma/${turma.id}`} 
+                            className="aAcao"
+                            onClick={() => handleEntrarTurma(turma)}
+                          > 
+                            Entrar
                           </Link>
-
                         </div>
-
                       </div>
-
                     ))}
-
                   </div>
-
-                  <div className="ContinuaTodo">
-
-                    <button type="button" className="login-button" onClick={() => setView("create")}>
-
-                      Nova Turma
-
-                    </button>
-
-                  </div>
-
+                  {role !== "ALUNO" && (
+                    <div className="ContinuaTodo">
+                      <button type="button" className="login-button" onClick={() => setView("create")}>
+                        Nova Turma
+                      </button>
+                    </div>
+                  )}
                 </div>
-
               </>
-
             )}
 
             {(view === "create" || view === "edit") && (
-
               <>
-
                 <h1 className="Titulo">
-
                   {view === "create" ? "Nova Turma" : "Editar Turma"}
-
                 </h1>
-
                 <form className="Formulario" onSubmit={view === "create" ? handleCreate : handleUpdate}>
-
                   <div className="Input">
-                    
                     <input
                       className="InputForm"
                       type="text"
@@ -246,37 +182,21 @@ function Turmas() {
                       required
                       maxLength={30}
                     />
-
                   </div>
-
                   <div className="ContinuaTodo">
-
                     <button type="submit" className="login-button">
-
                       Salvar
-
                     </button>
-
                     <button className="login-button" onClick={resetForm}>
-
                       Cancelar
-
                     </button>
-
                   </div>
-
                 </form>
-
               </>
-
             )}
-
           </div>
-
         </main>
-        
       </div>
-
     </div>
   );
 }
