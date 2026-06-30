@@ -5,19 +5,17 @@ import Input from "../components/Input";
 import api from "../services/api";
 
 function Avaliacoes() {
-  // Captura o ID da turma enviado pela URL da rota
+  
   const { turmaId } = useParams();
 
   const [atividades, setAtividades] = useState([]); 
   const [view, setView] = useState("list"); 
-  
-  // Estados separados para cada campo do formulário
+
   const [nome, setNome] = useState("");
   const [nota, setNota] = useState("");
   const [dataProva, setDataProva] = useState("");
   const [editingId, setEditingId] = useState(null);
 
-  // Executa automaticamente quando a tela abre ou a turma muda
   useEffect(() => {
     fetchAtividades();
   }, [turmaId]);
@@ -61,8 +59,7 @@ function Avaliacoes() {
     try {
       await api.put(`/api/v1/turmas/${turmaId}/atividades-avaliativas/${editingId}`, { 
         nome, 
-        nota, 
-        dataProva 
+        nota,
       });
       resetForm();
       fetchAtividades();
@@ -106,7 +103,6 @@ function Avaliacoes() {
                 <tr className="Info">
                   <th className="Coluna">Avaliação</th>
                   <th className="Coluna">Nota Máxima</th>
-                  <th className="Coluna">Data da Prova</th>
                   <th className="LinhaAcao">Ações</th>
                 </tr>
               </thead>
@@ -121,8 +117,7 @@ function Avaliacoes() {
                   atividades.map((atv) => (
                     <tr key={atv.id}>
                       <td className="LinhaDado">{atv.nome}</td>
-                      <td className="LinhaDado">{atv.nota || atv.valor}</td>
-                      <td className="LinhaDado">{atv.dataProva || atv.data}</td>
+                      <td className="LinhaDado">{atv.nota}</td>
                       <td className="LinhaAcao">
                         <button className="aAcao" onClick={() => handleEdit(atv)} style={{ marginRight: "10px" }}>
                           Editar
@@ -169,15 +164,6 @@ function Avaliacoes() {
                   maxLength={30}
                 />
 
-                <input
-                  className="InputForm"
-                  type="text"
-                  placeholder="Data da Prova"
-                  value={dataProva}
-                  onChange={(e) => setDataProva(e.target.value)}
-                  required
-                  maxLength={30}
-                />
               </div>
 
               <div className="ContinuaTodo">
