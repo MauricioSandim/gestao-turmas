@@ -1,21 +1,41 @@
 import { useParams } from "react-router-dom";
 import Button from "../components/Button";
 import { useState, useEffect } from "react";
-import Input from "../components/Input";
 import api from "../services/api";
 
 function Horarios() {
   const { turmaId } = useParams();
-
   const [horarios, setHorarios] = useState([]);
   const [view, setView] = useState("list");
   const [hora, setHora] = useState("");
   const [diaSemana, setDiaSemana] = useState("SEGUNDA");
   const [editingId, setEditingId] = useState(null);
+  const [role, setRole] = useState("");
 
   useEffect(() => {
-    fetchHorarios();
+    const localRole = localStorage.getItem('role') ? JSON.parse(localStorage.getItem('role')) : "";
+    setRole(localRole);
+
+    if (turmaId) {
+      if (localRole === "ALUNO") {
+        fetchDadosAluno();
+      } else {
+        fetchHorarios();
+      }
+    }
   }, [turmaId]);
+
+  const fetchDadosAluno = async () => {
+    try {
+      const response = await api.get('/api/v1/area-aluno');
+      const dadosTurma = response.data.find(m => String(m.turma?.id) === String(turmaId));
+      if (dadosTurma) {
+        setHorarios(dadosTurma.turma?.horariosAula || []);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchHorarios = async () => {
     try {
@@ -71,7 +91,7 @@ function Horarios() {
 
   const resetForm = () => {
     setHora("");
-    setDiaSemana("Segunda");
+    setDiaSemana("SEGUNDA");
     setEditingId(null);
     setView("list");
   };
@@ -82,22 +102,24 @@ function Horarios() {
         <>
           <div className="ParteSala">
             <h3>👥 Gerenciamento de Horários</h3>
-            <Button className="aAcao" onClick={() => setView("create")}>
-              Cadastrar Novo Horário
-            </Button>
+            {role !== "ALUNO" && (
+              <Button className="aAcao" onClick={() => setView("create")}>
+                Cadastrar Novo Horário
+              </Button>
+            )}
 
             <table className="Tabela">
               <thead>
                 <tr className="Info">
                   <th className="Coluna">Dia da Semana</th>
                   <th className="Coluna">Hora</th>
-                  <th className="LinhaAcao">Ações</th>
+                  {role !== "ALUNO" && <th className="LinhaAcao">Ações</th>}
                 </tr>
               </thead>
               <tbody>
                 {horarios.length === 0 ? (
                   <tr>
-                    <td colSpan="3" style={{ textAlign: "center", padding: "15px" }}>
+                    <td colSpan={role === "ALUNO" ? "2" : "3"} style={{ textAlign: "center", padding: "15px" }}>
                       Nenhum horário cadastrado para esta turma.
                     </td>
                   </tr>
@@ -106,14 +128,16 @@ function Horarios() {
                     <tr key={h.id}>
                       <td className="LinhaDado">{h.diaSemana}</td>
                       <td className="LinhaDado">{h.hora}</td>
-                      <td className="LinhaAcao">
-                        <button className="aAcao" onClick={() => handleEdit(h)} style={{ marginRight: "10px" }}>
-                          Editar
-                        </button>
-                        <button className="aAcao" onClick={() => handleDelete(h.id)}>
-                          Excluir
-                        </button>
-                      </td>
+                      {role !== "ALUNO" && (
+                        <td className="LinhaAcao">
+                          <button className="aAcao" onClick={() => handleEdit(h)} style={{ marginRight: "10px" }}>
+                            Editar
+                          </button>
+                          <button className="aAcao" onClick={() => handleDelete(h.id)}>
+                            Excluir
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))
                 )}
@@ -123,7 +147,7 @@ function Horarios() {
         </>
       )}
 
-      {(view === "create" || view === "edit") && (
+      {(view === "create" || view === "edit") && role !== "ALUNO" && (
         <>
           <div className="TurmaTodo">
             <h1 className="Titulo">
