@@ -16,6 +16,10 @@ import java.util.List;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
+    public List<Usuario> findAllAlunos() {
+        return usuarioRepository.findAllByRoleNome(RoleEnum.ALUNO);
+    }
+
     public List<Usuario> findAllByRole(RoleEnum role) {
         return usuarioRepository.findAllByRoleNome(role);
     }

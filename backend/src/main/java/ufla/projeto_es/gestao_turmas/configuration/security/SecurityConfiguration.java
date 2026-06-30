@@ -45,23 +45,23 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        
+
         // 1. Libera a URL de origem do seu front-end React/Vite
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); 
-        
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+
         // 2. Libera os métodos HTTP que o front-end fará
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        
+
         // 3. Permite os cabeçalhos necessários, principalmente o Authorization para o JWT
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
-        
+
         // 4. Necessário se for enviar credenciais/tokens de forma embutida
         configuration.setAllowCredentials(true);
 
         // 5. Aplica essa regra globalmente para todos os endpoints (/**)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        
+
         return source;
     }
 
@@ -94,10 +94,14 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/turmas/**").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/turmas/**").hasRole("PROFESSOR")
 
+                        .requestMatchers(HttpMethod.GET, "/api/v1/aluno/**").hasRole("PROFESSOR")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/area-aluno").hasRole("ALUNO")
+
                         // Regras genéricas de ADMIN para usuários (Delete, Update geral, Listar todos)
                         .requestMatchers("/api/v1/usuario/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated())
+                        .anyRequest().hasRole("ADMIN"))
 
                 .addFilterBefore(this.securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

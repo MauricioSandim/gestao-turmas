@@ -81,7 +81,11 @@ public class TurmaService {
 
         Turma turma = turmaRepository.findByIdAndUsuario_Id(id, usuario.getId()).orElseThrow(() -> new NotFoundException("Turma não encontrada para id: " + id));
 
+        if (!turma.getMatriculas().isEmpty())
+            throw new IllegalArgumentException("NNão é possível excluir uma turma com matrículas associadas.");
+
         turmaRepository.delete(turma);
     }
 
 }
+
